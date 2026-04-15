@@ -97,8 +97,8 @@ A structured course for learning the MLIR (Multi-Level Intermediate Representati
 ## Progress Tracker
 
 ### Phase 1: Foundations
-- [ ] Step 1: Understanding the IR Structure
-- [ ] Step 2: Language Reference
+- [x] Step 1: Understanding the IR Structure
+- [x] Step 2: Language Reference
 - [ ] Step 3: Explore `mlir-opt` toolchain
 - [ ] Step 4: Toy Tutorial (Ch0-Ch4)
 
