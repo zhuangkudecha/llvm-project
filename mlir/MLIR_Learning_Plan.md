@@ -13,7 +13,11 @@ A structured course for learning the MLIR (Multi-Level Intermediate Representati
 | 1 | `docs/Tutorials/UnderstandingTheIRStructure.md` | Operations, Blocks, Regions, Values |
 | 2 | `docs/LangRef.md` | Full language reference — types, attributes, ops, dialects |
 | 3 | Run `mlir-opt --help` to see available passes | Get a feel for the toolchain |
-| 4 | Toy Tutorial (`docs/Tutorials/Toy/`) | Ch0-Ch4: Build a mini compiler end-to-end |
+| 4 | Toy Tutorial (`docs/Tutorials/Toy/`) | Ch0-Ch7: Build a complete mini compiler end-to-end |
+|   | Ch0-Ch4: Language, Dialect, Optimization, Interfaces | ODS, Pattern Rewriting, Shape Inference, Inlining |
+|   | Ch5: Lowering to Affine + Loops | DialectConversion, ConversionTarget, TypeConverter |
+|   | Ch6: Lowering to LLVM | Partial lowering, affine→SCF→CF→LLVM pipeline |
+|   | Ch7: Extending Toy (Struct types, complete pipeline) | Custom types, full compilation to JIT execution |
 
 **Milestone:** You can read/write basic `.mlir` files and understand the IR structure.
 
@@ -100,7 +104,7 @@ A structured course for learning the MLIR (Multi-Level Intermediate Representati
 - [x] Step 1: Understanding the IR Structure
 - [x] Step 2: Language Reference
 - [x] Step 3: Explore `mlir-opt` toolchain
-- [ ] Step 4: Toy Tutorial (Ch0-Ch4)
+- [ ] Step 4: Toy Tutorial (Ch0-Ch7)
 
 ### Phase 2: Core Infrastructure
 - [ ] Step 5: Core IR headers
