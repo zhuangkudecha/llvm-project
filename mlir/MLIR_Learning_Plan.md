@@ -107,12 +107,12 @@ A structured course for learning the MLIR (Multi-Level Intermediate Representati
 - [ ] Step 4: Toy Tutorial (Ch0-Ch7)
 
 ### Phase 2: Core Infrastructure
-- [ ] Step 5: Core IR headers
-- [ ] Step 6: Pass infrastructure
-- [ ] Step 7: Pass Management docs
-- [ ] Step 8: Canonicalization
-- [ ] Step 9: Transform framework
-- [ ] Step 10: Pattern Rewriter
+- [x] Step 5: Core IR headers
+- [x] Step 6: Pass infrastructure
+- [x] Step 7: Pass Management docs
+- [x] Step 8: Canonicalization
+- [x] Step 9: Transform framework
+- [x] Step 10: Pattern Rewriter
 
 ### Phase 3: Dialects Deep Dive
 - [ ] Step 11: Creating a dialect tutorial
