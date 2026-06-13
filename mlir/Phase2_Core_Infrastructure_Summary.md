@@ -9,9 +9,22 @@ Step 5:  Core IR   (Operation, Value, Block, Region, Type, Attribute)
 Step 6:  Pass       (Pass, OperationPass, PassManager)
 Step 7:  Pass 管理  (Pass 嵌套、验证、管道化)
 Step 8:  规范化     (Canonicalization)
-Step 9:  Transform  (GreedyPatternRewriteDriver)
-Step 10: Rewriter   (Pattern, RewritePattern, OpRewritePattern)
+Step 9:  Transform  (Transform 基础设施 + 变换调度视角)
+Step 10: Rewriter   (Pattern, RewritePattern, OpRewritePattern, GreedyPatternRewriteDriver)
 ```
+
+> 初学提示：如果你是从 AI 编译器角度学习 MLIR，不要先被底层类名淹没。可以先把 Phase 2 理解成一条 IR 变换链：
+>
+> ```
+> PassManager 选择要跑的 Pass
+>   -> Pass 在某个 Operation 层级上执行
+>   -> RewritePattern 匹配局部 IR
+>   -> PatternRewriter/OpBuilder 创建或替换 Operation
+>   -> Value 的 use-def 链自动更新
+>   -> IR 从高层 Dialect 逐步降到低层 Dialect
+> ```
+>
+> 下面的源码细节都是为解释这条链如何被 MLIR 框架支撑。
 
 ---
 
@@ -196,15 +209,14 @@ ModuleOp (Operation)
 ```cpp
 class Type {
 public:
-  TypeID getTypeID() const;           // 类型 ID
+  TypeID getTypeID();                 // 类型 ID
   Dialect &getDialect() const;        // 所属方言
   MLIRContext *getContext() const;    // 所属上下文
   bool isInteger() const;
   bool isFloat() const;
   // ...
 private:
-  const AbstractType *abstractTy;     // 类型的抽象描述
-  Impl *impl;                         // 类型的具体数据
+  ImplType *impl;                     // 指向 MLIRContext 管理的唯一化存储
 };
 ```
 
@@ -213,7 +225,7 @@ private:
 ```cpp
 class Attribute {
 public:
-  TypeID getTypeID() const;
+  TypeID getTypeID();
   Dialect &getDialect() const;
   MLIRContext *getContext() const;
   // 常用子类:
@@ -222,14 +234,13 @@ public:
 };
 ```
 
-**StorageUniquer 机制**：Type 和 Attribute 都通过 `StorageUniquer` 实现唯一化——相同的 Type/Attribute 在全局只创建一个实例，后续通过哈希表查找复用：
+**StorageUniquer 机制**：Type 和 Attribute 都是轻量 wrapper，内部保存指向唯一化 storage 的指针。具体类型/属性的参数作为 key 交给 `TypeUniquer` / `AttributeUniquer` 管理；相同内容在同一个 `MLIRContext` 中只创建一份，后续通过哈希表查找复用。类型的静态描述信息通过 `AbstractType` / `AbstractAttribute` 挂在 storage 背后，而不是直接作为 `Type` 对象里的独立字段。
 
 ```cpp
-// Dialect.h:337 - 类型注册
+// Dialect.h - 类型注册
 template <typename T>
-void addType() {
-  addType(T::getTypeID(), AbstractType::get<T>(*this));
-  detail::TypeUniquer::registerType<T>(context);
+void addTypes() {
+  (void)std::initializer_list<int>{0, (addType<Args>(), 0)...};
 }
 ```
 
@@ -516,7 +527,11 @@ public:
 
 ### 3.1 什么是 Canonicalization
 
-**意义**：规范化是将 IR 转换为"标准形式"的过程，使得后续 Pass 可以假设 IR 遵循某些约定（如常量总是在右侧、没有恒等操作等）。这是 MLIR 中最基本、最常用的优化。
+**意义**：规范化是尽力把 IR 转换为更稳定、更容易被后续分析和优化处理的形式，例如消除恒等操作、折叠常量、移动某些常量操作数等。它是 MLIR 中最基本、最常用的优化之一，但不是正确性的前置条件。
+
+官方文档里有两个关键约束：
+- Canonicalizer 是 **best-effort**：它会贪心应用模式，直到到达不动点或达到迭代/重写上限，不保证整个 IR 一定进入某个形式化定义的 canonical form。
+- Pass pipeline **不应该依赖 canonicalizer 保证正确性**：移除 canonicalizer 后，其他 Pass 仍应语义正确，只是优化效果可能变差。
 
 **注册规范化模式**：
 
@@ -546,11 +561,23 @@ std::unique_ptr<Pass> createCanonicalizerPass(
 - 死代码消除
 - 简化控制流
 
-**意义**：规范化是 MLIR 的"卫生保洁"机制。Pass 的作者不需要手动处理所有边界情况，只要 IR 不满足规范化假设，后续的 Canonicalize Pass 会自动清理。
+**意义**：规范化是 MLIR 的"卫生保洁"机制。它降低后续 Pass 需要处理的冗余形式数量，但 Pass 作者不能把它当作语义正确性的保证；真正必须满足的 IR 约束应由 verifier、conversion legality 或 Pass 自己显式检查。
 
 ---
 
-## 四、Pattern Rewriting 框架 (Step 9-10)
+## 四、Transform 与 Pattern Rewriting 框架 (Step 9-10)
+
+### 4.0 Transform framework 与 Pattern Rewriting 的边界
+
+Phase 2 的 Step 9 原计划指向 `include/mlir/Transform/`，它更接近“如何描述、组织和调度变换”的基础设施；Step 10 指向 `docs/PatternRewriter.md`，它关注“如何在局部匹配并改写 IR”。两者经常一起出现，但不是同一个层级：
+
+```
+Transform / Pass 层：决定什么时候、对哪些 payload IR 应用哪类变换
+Pattern Rewriting 层：决定某个局部 Operation 匹配后如何替换成新 IR
+GreedyPatternRewriteDriver：常用的 pattern 调度器，反复应用模式直到收敛或达到限制
+```
+
+本总结后半部分主要覆盖 Pattern Rewriting 和 Greedy driver；如果后续要补齐 Transform dialect / Transform framework，应单独阅读 `include/mlir/Dialect/Transform/`、`include/mlir/Transform/` 以及 `docs/Dialects/Transform.md`。
 
 ### 4.1 Pattern 继承体系
 
@@ -704,16 +731,16 @@ public:
 
 ### 4.5 GreedyPatternRewriteDriver — 贪心重写驱动器
 
-**意义**：GreedyPatternRewriteDriver 是最常用的模式驱动器。它反复应用所有 Pattern 直到不动点（fixed point）或达到迭代上限。
+**意义**：GreedyPatternRewriteDriver 是最常用的模式驱动器。它在 worklist 上反复应用局部收益最高的 Pattern，直到不动点（fixed point）或达到迭代/重写上限。
 
 **工作原理**：
 
 ```
-1. 将所有 Pattern 按 benefit 排序
-2. 遍历 IR 中的每个 Operation
-3. 对每个 Op 尝试所有匹配的 Pattern
-4. 如果有 Pattern 成功：修改 IR，将受影响的 Op 加入 worklist
-5. 重复直到 worklist 为空或达到最大迭代次数
+1. 根据入口形式初始化 worklist：region-based driver 会收集容器内的 Op，op-based driver 使用显式传入的 Op 列表
+2. 对 worklist 中的 Op 尝试可匹配 Pattern，并优先选择局部 benefit 更高的 Pattern
+3. Pattern 通过 `PatternRewriter` 修改 IR，driver 通过 listener 感知修改
+4. 新建或被原地修改的 Op 会按 `GreedyRewriteConfig` 的 scope/strictness 规则重新进入 worklist
+5. 重复直到到达不动点，或达到最大迭代次数/最大重写次数
 ```
 
 **使用方式**：
@@ -725,14 +752,13 @@ void runOnOperation() override {
   // 添加自定义模式
   patterns.add<MyPattern1, MyPattern2>(patterns.getContext());
   // 也可以添加方言的规范化模式
-  if (failed(applyPatternsAndFoldGreedily(getOperation(),
-                                          std::move(patterns)))) {
+  if (failed(applyPatternsGreedily(getOperation(), std::move(patterns)))) {
     signalPassFailure();
   }
 }
 ```
 
-**意义**：GreedyPatternRewriteDriver 实现了"编写模式、框架负责调度"的编程模型。开发者只需关注局部变换逻辑，驱动器负责全局收敛和正确性。
+**意义**：GreedyPatternRewriteDriver 实现了"编写模式、框架负责调度"的编程模型。开发者主要关注局部变换逻辑，驱动器负责 worklist、收敛控制、folding 和常量 CSE 等通用机制。它能帮助变换收敛，但不能替代 Pattern 自身的合法性检查；循环重写或语义不等价的 Pattern 仍然是 Pattern 作者的 bug。
 
 ---
 
@@ -833,8 +859,8 @@ struct MyPass : public impl::MyPassBase<MyPass> {
     // 收集目标 Op 的规范化模式
     MyDialect::getCanonicalizationPatterns(patterns, &getContext());
 
-    // 应用贪心重写
-    if (failed(applyPatternsAndFoldGreedily(op, std::move(patterns))))
+    // 应用贪心重写；folding 行为可通过 GreedyRewriteConfig 控制
+    if (failed(applyPatternsGreedily(op, std::move(patterns))))
       signalPassFailure();
   }
 };
