@@ -180,6 +180,7 @@ lib/Dialect/Arith/IR/ArithOps.cpp
 ### Quiz
 
 1. `.td` 文件和 `.mlir` 文件的区别是什么？
+td文件是mlir方言系统的生成脚本，可以通过td生成Operation的一些实现，mlir文件可以视作模型的表示。
 2. `PatternRewriter::replaceOp` 和 `eraseOp` 分别适合什么场景？
 3. `DialectConversion` 中 `ConversionTarget` 的作用是什么？
 4. 为什么调试 pass 时常加 `-mlir-disable-threading`？

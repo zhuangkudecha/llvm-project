@@ -438,4 +438,3 @@ GPU Execution
 # 13. 一句话终极总结
 
 > Triton 是一个“Python嵌入式 kernel compiler”，它通过 runtime IR recording + LLVM/PTX lowering，将 fusion / tiling / memory planning 三大优化统一到 tile-level GPU kernel 生成过程中。
-
