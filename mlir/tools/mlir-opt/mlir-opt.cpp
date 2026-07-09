@@ -70,6 +70,7 @@ void registerVectorizerTestPass();
 
 namespace test {
 void registerCommutativityUtils();
+void registerAddZeroPatternPass();
 void registerConvertCallOpPass();
 void registerConvertFuncOpPass();
 void registerInliner();
@@ -220,6 +221,7 @@ static void registerTestPasses() {
   registerVectorizerTestPass();
 
   mlir::test::registerCommutativityUtils();
+  mlir::test::registerAddZeroPatternPass();
   mlir::test::registerConvertCallOpPass();
   mlir::test::registerConvertFuncOpPass();
   mlir::test::registerInliner();

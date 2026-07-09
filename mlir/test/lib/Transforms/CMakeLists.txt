@@ -32,6 +32,7 @@ add_mlir_library(MLIRTestTransforms
   TestMakeIsolatedFromAbove.cpp
   TestSingleFold.cpp
   TestTransformsOps.cpp
+  AddZeroPatternPass.cpp
   ${MLIRTestTransformsPDLSrc}
 
   EXCLUDE_FROM_LIBMLIR
@@ -52,6 +53,7 @@ mlir_target_link_libraries(MLIRTestTransforms PUBLIC
   MLIRInferIntRangeInterface
   MLIRTransforms
   MLIRTransformDialect
+  MLIRArithDialect
   )
 
 target_include_directories(MLIRTestTransforms

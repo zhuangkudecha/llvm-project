@@ -1,4 +1,4 @@
-# MLIR Defining Dialects - 中文学习总结
+# MLIR Defining Dialects
 
 本文基于 `mlir/docs/DefiningDialects/_index.md` 整理，主题是：
 
@@ -139,6 +139,153 @@ void MyDialect::initialize() {
 ```text
 TableGen 描述 dialect 有什么
 initialize 真正把这些东西注册进 MLIRContext 可用的 dialect 对象中
+```
+
+### 3.1 例子：一个 Toy/MyDialect 的 initialize
+
+假设我们在 TableGen 中定义了一个 dialect：
+
+```tablegen
+include "mlir/IR/DialectBase.td"
+
+def My_Dialect : Dialect {
+  let name = "my";
+  let cppNamespace = "::my";
+
+  let summary = "Example dialect for learning MLIR dialect initialization";
+
+  let dependentDialects = [
+    "arith::ArithDialect",
+    "func::FuncDialect"
+  ];
+}
+```
+
+并且这个 dialect 有：
+
+```text
+Operations:
+  my.constant
+  my.print
+  my.add
+
+Types:
+  my.struct
+
+Interfaces:
+  一个 dialect-level inliner interface
+```
+
+那么 C++ 初始化通常长这样：
+
+```c++
+#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
+#include "mlir/IR/DialectImplementation.h"
+
+#include "MyDialect/MyDialect.h"
+#include "MyDialect/MyOps.h"
+#include "MyDialect/MyTypes.h"
+
+// TableGen 生成的 dialect 定义。
+#include "MyDialect/MyDialect.cpp.inc"
+
+// TableGen 生成的 operation class 定义。
+#define GET_OP_CLASSES
+#include "MyDialect/MyOps.cpp.inc"
+
+using namespace mlir;
+using namespace my;
+
+namespace {
+struct MyInlinerInterface : public DialectInlinerInterface {
+  using DialectInlinerInterface::DialectInlinerInterface;
+
+  bool isLegalToInline(Operation *call, Operation *callable,
+                       bool wouldBeCloned) const final {
+    return true;
+  }
+};
+} // namespace
+
+void MyDialect::initialize() {
+  // 1. 注册这个 dialect 拥有的 operations。
+  addOperations<
+#define GET_OP_LIST
+#include "MyDialect/MyOps.cpp.inc"
+      >();
+
+  // 2. 注册这个 dialect 拥有的 custom types。
+  addTypes<
+      StructType
+      >();
+
+  // 3. 注册 dialect-level interface。
+  addInterfaces<MyInlinerInterface>();
+}
+```
+
+这段代码的含义：
+
+```text
+addOperations<...>()
+  把 ODS 生成的 my.constant / my.print / my.add 等 op 注册到 MyDialect。
+  否则 parser 看到 "my.add" 时不知道它是一个已注册 op。
+
+addTypes<...>()
+  把 my.struct 这种 dialect 自定义 type 注册到 MyDialect。
+  否则 parser/printer/type uniquing 无法识别这个 type。
+
+addInterfaces<...>()
+  给整个 dialect 挂 interface。
+  例如 inlining、constant materialization、assembly alias 等 dialect 级行为。
+```
+
+`dependentDialects` 则是另一层含义：
+
+```text
+dependentDialects
+  声明 MyDialect 运行时可能会创建或依赖 arith / func dialect 的组件。
+
+initialize()
+  注册 MyDialect 自己拥有的 op/type/interface。
+```
+
+例如 `my.constant` 的 fold/canonicalize 可能生成 `arith.constant`，或者 lowering/canonicalization 中引用 `func.func` 相关对象，那么 `arith::ArithDialect`、`func::FuncDialect` 就应该作为 dependent dialect 写进 TableGen。
+
+更小的 Toy 教程例子是：
+
+```c++
+void ToyDialect::initialize() {
+  addOperations<
+#define GET_OP_LIST
+#include "toy/Ops.cpp.inc"
+      >();
+}
+```
+
+如果后续 Toy dialect 增加了自定义 `StructType`，初始化会扩展为：
+
+```c++
+void ToyDialect::initialize() {
+  addOperations<
+#define GET_OP_LIST
+#include "toy/Ops.cpp.inc"
+      >();
+
+  addTypes<StructType>();
+}
+```
+
+所以可以把 `initialize()` 看成 dialect 构造时的注册表填充点：
+
+```text
+MyDialect object 被 MLIRContext 加载
+  -> 调用 MyDialect::initialize()
+      -> 注册 my.* operations
+      -> 注册 my.* types
+      -> 注册 my.* attributes
+      -> 注册 dialect interfaces
 ```
 
 ---
