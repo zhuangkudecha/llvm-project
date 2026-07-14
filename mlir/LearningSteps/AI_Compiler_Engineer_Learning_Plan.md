@@ -135,7 +135,7 @@ Triton：
 | 阶段 | 当前状态 | 通过标准 |
 |---|---|---|
 | Phase 1：CUDA/Triton Kernel 基础 | 未开始 | 独立实现并解释 tiled matmul 和 fused kernel |
-| Phase 2：MLIR Transformation 桥接 | 基础练习已完成，阶段未通过 | 参数化 matmul tiling + 完整测试 |
+| Phase 2：MLIR Transformation 桥接 | 基础练习已完成，阶段未通过 | 多 Op rewrite + DialectConversion + 参数化 matmul tiling + 完整测试 |
 | Phase 3：Triton Compiler 内部 | 未开始 | 修改并测试一个真实 compiler pass |
 | Phase 4：冻结 Baseline | 未开始 | 六组正确性 + 稳定 RTX 4090 数据 |
 | Phase 5：性能优化实验 | 未开始 | hypothesis/change/measurement/ablation 闭环 |
@@ -420,7 +420,7 @@ first-rtx4090-benchmark.csv
 
 ## 8. Phase 2：MLIR Transformation 桥接
 
-周期：第 5-7 周，约 33 小时
+周期：第 5-10 周，约 66 小时
 
 ### 8.1 当前起点
 
@@ -485,13 +485,36 @@ lib/Dialect/SCF/Transforms/TileUsingInterface.cpp
 ### 8.4 实践任务
 
 ```text
-1. 给 AddZeroPattern 关闭 driver folding，隔离验证自定义 pattern
-2. 写一个包含 producer-consumer 约束的多 op rewrite
-3. 写参数化 linalg.matmul tiling transformation
-4. 生成 scf.for 或 scf.forall loop nest
-5. 覆盖整除和非整除 tile
-6. 对错误 tile size 提供明确诊断
-7. 写 FileCheck 正例、负例和边界测试
+Week 5：IR、SSA 与 Pass 基础
+  Operation / Region / Block / Value / Use
+  use-def、dominance、walk、pass anchor、analysis invalidation
+
+Week 6：Rewrite 系统
+  folding / canonicalization / pattern
+  PatternBenefit、greedy worklist、递归、终止性
+  隔离验证 AddZeroPattern
+
+Week 7：多 Op Transformation
+  producer-consumer chain
+  Linear + Bias + ReLU 子图匹配
+  multi-use、side effect、negative case、rewrite legality
+
+Week 8：DialectConversion
+  ConversionTarget / TypeConverter
+  partial/full conversion
+  legality、materialization、失败诊断
+
+Week 9：结构化 Op Interfaces
+  DestinationStyleOpInterface
+  TilingInterface
+  ReifyRankedShapedTypeOpInterface
+  Transform Dialect
+
+Week 10：参数化 Tiling 与 Lowering 演化
+  C++ linalg.matmul tiling transformation
+  整除和非整除 tile
+  tiling -> bufferization -> vectorization IR evolution
+  正例、负例、边界测试
 ```
 
 ### 8.5 阶段门槛
@@ -508,9 +531,14 @@ lib/Dialect/SCF/Transforms/TileUsingInterface.cpp
 阶段产出：
 
 ```text
+IR/SSA/use-def/dominance 学习样例
+隔离 folding 的 AddZeroPattern 测试
+Linear + Bias + ReLU 多 op rewrite
+一个最小 DialectConversion pass
 linalg-matmul-tiling pass
 完整 FileCheck 测试
 tiling 前后 IR 对照
+tiling/bufferization/vectorization IR evolution
 transformation legality 说明
 ```
 
@@ -518,7 +546,7 @@ transformation legality 说明
 
 ## 9. Phase 3：Triton Compiler 内部
 
-周期：第 8-10 周，约 33 小时
+周期：第 11-13 周，约 33 小时
 
 ### 9.1 目标
 
@@ -628,7 +656,7 @@ TTIR/TTGIR/LLVM/PTX 对照样例
 
 ## 10. Phase 4：冻结 Baseline
 
-周期：第 11-14 周，约 44 小时
+周期：第 14-16 周，约 33 小时
 
 ### 10.1 目标
 
@@ -684,7 +712,7 @@ baseline-report.md
 
 ## 11. Phase 5：性能优化实验
 
-周期：第 15-19 周，约 55 小时
+周期：第 17-20 周，约 44 小时
 
 ### 11.1 分析闭环
 
@@ -756,7 +784,7 @@ ablation results
 
 ## 12. Phase 6：泛化与回归
 
-周期：第 20-22 周，约 33 小时
+周期：第 21-22 周，约 22 小时
 
 ### 12.1 目标
 
@@ -874,11 +902,11 @@ gpu-codegen-capstone/
 | 周次 | 阶段 | 预算 | 主要门槛 |
 |---|---|---:|---|
 | 1-4 | CUDA/Triton Kernel 基础 | 44h | 独立实现并解释 tiled matmul 和 fused kernel |
-| 5-7 | MLIR Transformation 桥接 | 33h | 参数化 matmul tiling + 完整测试 |
-| 8-10 | Triton Compiler 内部 | 33h | 修改并测试一个真实 compiler pass |
-| 11-14 | 冻结 Baseline | 44h | 六组正确性 + 稳定 RTX 4090 数据 |
-| 15-19 | 性能优化实验 | 55h | hypothesis/change/measurement/ablation 闭环 |
-| 20-22 | 泛化与回归 | 33h | 几何平均、最坏退化和适用范围 |
+| 5-10 | MLIR Transformation 桥接 | 66h | 多 op rewrite + DialectConversion + 参数化 tiling |
+| 11-13 | Triton Compiler 内部 | 33h | 修改并测试一个真实 compiler pass |
+| 14-16 | 冻结 Baseline | 33h | 六组正确性 + 稳定 RTX 4090 数据 |
+| 17-20 | 性能优化实验 | 44h | hypothesis/change/measurement/ablation 闭环 |
+| 21-22 | 泛化与回归 | 22h | 几何平均、最坏退化和适用范围 |
 | 23-24 | 工程化交付 | 22h | 可复现代码、测试和性能报告 |
 | 合计 |  | 264h |  |
 

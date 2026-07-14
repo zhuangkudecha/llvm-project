@@ -41,19 +41,19 @@
 | 5 | 2026-08-12 | 2026-08-18 | MLIR Transformation |
 | 6 | 2026-08-19 | 2026-08-25 | MLIR Transformation |
 | 7 | 2026-08-26 | 2026-09-01 | MLIR Transformation |
-| 8 | 2026-09-02 | 2026-09-08 | Triton Compiler |
-| 9 | 2026-09-09 | 2026-09-15 | Triton Compiler |
-| 10 | 2026-09-16 | 2026-09-22 | Triton Compiler |
-| 11 | 2026-09-23 | 2026-09-29 | Baseline |
-| 12 | 2026-09-30 | 2026-10-06 | Baseline |
-| 13 | 2026-10-07 | 2026-10-13 | Baseline |
+| 8 | 2026-09-02 | 2026-09-08 | MLIR Transformation |
+| 9 | 2026-09-09 | 2026-09-15 | MLIR Transformation |
+| 10 | 2026-09-16 | 2026-09-22 | MLIR Transformation |
+| 11 | 2026-09-23 | 2026-09-29 | Triton Compiler |
+| 12 | 2026-09-30 | 2026-10-06 | Triton Compiler |
+| 13 | 2026-10-07 | 2026-10-13 | Triton Compiler |
 | 14 | 2026-10-14 | 2026-10-20 | Baseline |
-| 15 | 2026-10-21 | 2026-10-27 | 性能优化 |
-| 16 | 2026-10-28 | 2026-11-03 | 性能优化 |
+| 15 | 2026-10-21 | 2026-10-27 | Baseline |
+| 16 | 2026-10-28 | 2026-11-03 | Baseline |
 | 17 | 2026-11-04 | 2026-11-10 | 性能优化 |
 | 18 | 2026-11-11 | 2026-11-17 | 性能优化 |
 | 19 | 2026-11-18 | 2026-11-24 | 性能优化 |
-| 20 | 2026-11-25 | 2026-12-01 | 泛化与回归 |
+| 20 | 2026-11-25 | 2026-12-01 | 性能优化 |
 | 21 | 2026-12-02 | 2026-12-08 | 泛化与回归 |
 | 22 | 2026-12-09 | 2026-12-15 | 泛化与回归 |
 | 23 | 2026-12-16 | 2026-12-22 | 工程化交付 |
@@ -531,13 +531,111 @@ num_stages: 2,3,4
 RTX 4090 benchmark 和 ncu 已真实运行
 ```
 
-未通过时重复 Week 3-4，不进入 compiler internals。
+未通过时重复 Week 3-4，不进入 Phase 2。
 
 ---
 
 ## 4. Phase 2：MLIR Transformation 桥接
 
-## Week 5：隔离 Rewrite、Fold 与 Driver
+### 统一构建约定
+
+本阶段 C++ pass 的可编译源码统一放入 upstream 的 test-only 工具链，学习输入、测试副本和说明文档放在 `$CAPSTONE`：
+
+```text
+test/lib/Transforms/<Pass>.cpp          # 可编译源码唯一真源
+test/lib/Transforms/CMakeLists.txt      # 源文件与所需 MLIR link library
+tools/mlir-opt/mlir-opt.cpp             # pass 声明与注册调用
+$CAPSTONE/mlir/tests/*.mlir             # 本项目的 lit/FileCheck 输入
+$CAPSTONE/docs/*.md                     # 设计、IR 对照与失败记录
+```
+
+每增加一个 pass，都必须先让 `cmake --build $MLIR_BUILD --target mlir-opt` 成功，再用
+`$MLIR_BIN/mlir-opt --help` 确认参数已注册。不得维护两份会独立演化的 C++ 实现。
+
+## Week 5：IR、SSA、Use-Def 与 Pass 基础
+
+**Files:**
+
+- Create: `mlir/ir_ssa_walk.mlir`
+- Create: `test/lib/Transforms/IRSSAInspectionPass.cpp`
+- Modify: `test/lib/Transforms/CMakeLists.txt`
+- Modify: `tools/mlir-opt/mlir-opt.cpp`
+- Create: `mlir/tests/ir-ssa-inspection.mlir`
+- Create: `docs/mlir_ir_ssa_notes.md`
+
+### 工作日
+
+- [ ] **周一：手写多 Region/Block IR**
+
+在 `ir_ssa_walk.mlir` 中至少包含：
+
+```text
+builtin.module
+func.func
+scf.if 的两个 region
+scf.for 的 block argument
+一个值具有两个 users
+一个跨 block 使用且满足 dominance 的值
+```
+
+运行：
+
+```bash
+$MLIR_BIN/mlir-opt $CAPSTONE/mlir/ir_ssa_walk.mlir -verify-each
+```
+
+Expected：IR verifier 返回 0。
+
+- [ ] **周二：画出 SSA use-def 图**
+
+在 `mlir_ir_ssa_notes.md` 对每个 `Value` 写明：owner、type、defining op/block argument、users；区分 op result 与 block argument。
+
+- [ ] **周三：写 inspection pass**
+
+实现 `OperationPass<func::FuncOp>`，使用 `getOperation()->walk(...)` 统计 operation、region、block、value 和 use 数量；输出 deterministic test result。
+
+- [ ] **周四：加入 dominance 查询**
+
+使用 `DominanceInfo` 检查选定 definition 是否支配两个 uses；增加一个合法多 block case。
+
+- [ ] **周五：比较 FuncOp 与 ModuleOp anchor**
+
+分别记录：`getOperation()` 类型、一次 pipeline 中运行次数、可见作用域、analysis 生命周期和并行机会。运行：
+
+```bash
+$MLIR_BIN/mlir-opt $CAPSTONE/mlir/ir_ssa_walk.mlir \
+  -pass-pipeline='builtin.module(func.func(ir-ssa-inspection))'
+```
+
+### 周末
+
+- [ ] **周六：写正例和 verifier 负例**
+
+正例检查 walk 统计和 dominance 结果；负例使用 `-verify-diagnostics` 构造不满足 dominance 或类型不匹配的 IR，并检查诊断。
+
+- [ ] **周日：解释 analysis invalidation**
+
+在笔记中回答：
+
+```text
+只读 pass 可以 preserve 什么？
+rewrite 以后为什么旧 DominanceInfo 可能失效？
+PassManager 如何按 anchor 调度 nested pass？
+Operation::walk 是否自动跨越 nested regions？
+```
+
+### Week 5 Exit Gate
+
+```text
+能区分 op result 与 block argument
+能从 IR 画出 use-def 和 dominance 关系
+inspection pass 的正例/负例测试通过
+能解释 FuncOp/ModuleOp anchor 和 analysis invalidation
+```
+
+---
+
+## Week 6：隔离 Rewrite、Fold 与 Driver
 
 **Files:**
 
@@ -614,7 +712,7 @@ diff -u LearningSteps/rewrite-pattern-addi-zero/AddZeroPatternPass.cpp \
 
 Expected：除明确记录的集成差异外内容一致。长期真实编译入口标记为 `test/lib/Transforms/AddZeroPatternPass.cpp`。
 
-### Week 5 Exit Gate
+### Week 6 Exit Gate
 
 ```text
 能够用 red/green 证明确实是自定义 pattern 完成 rewrite
@@ -624,23 +722,167 @@ Expected：除明确记录的集成差异外内容一致。长期真实编译入
 
 ---
 
-## Week 6：Transform Dialect 驱动 Matmul Tiling
+## Week 7：多 Op Producer-Consumer Transformation
+
+**Files:**
+
+- Create: `test/lib/Transforms/FusedLinearEpiloguePass.cpp`
+- Modify: `test/lib/Transforms/CMakeLists.txt`
+- Modify: `tools/mlir-opt/mlir-opt.cpp`
+- Create: `mlir/tests/fused-linear-epilogue.mlir`
+- Create: `mlir/tests/fused-linear-epilogue-invalid.mlir`
+- Create: `docs/multi_op_rewrite_notes.md`
+
+### 工作日
+
+- [ ] **周一：构造 Linear + Bias + ReLU IR**
+
+使用 `linalg.matmul` 和两个 elementwise `linalg.generic` 表达：
+
+```text
+matmul(A, B) -> add broadcast(bias) -> max(value, 0)
+```
+
+同时加入一个 matmul result 具有第二个 user 的 case。
+
+- [ ] **周二：实现只读 chain matcher**
+
+从 ReLU consumer 反向检查 defining op、operand index、iterator types、indexing maps、dtype、单 user 条件和 side effects；用 `notifyMatchFailure` 记录失败原因。
+
+- [ ] **周三：加入 PatternBenefit 和受控 pattern 集**
+
+为 epilogue chain pattern 设置明确 benefit；构造一个会与简单 elementwise fold 竞争的 case，记录 greedy driver 选择顺序。
+
+- [ ] **周四：实现语义保持的 epilogue fusion**
+
+使用 Linalg elementwise fusion utility/pattern，将 bias 与 ReLU 合并为单个 elementwise consumer；不在本周尝试将 reduction matmul 强行内联到 elementwise region。
+
+- [ ] **周五：处理 multi-use 和 side-effect 负例**
+
+multi-use、错误 broadcast map、不匹配 dtype、非 ReLU max、额外 side effect 必须拒绝或保持原 IR，不能部分改写。
+
+### 周末
+
+- [ ] **周六：写结构性 FileCheck**
+
+正例检查 elementwise op 数量减少且计算语义保留；负例检查原链保持。运行目标 pass 两次，确认不会继续改写或无限增长。
+
+- [ ] **周日：解释 rewrite legality 和终止性**
+
+回答：
+
+```text
+为什么 single-use 可能是 fusion 前置条件？
+PatternBenefit 如何影响选择但不保证全局最优？
+如何证明 rewrite 使 IR 朝终止方向变化？
+为什么不能在 match 成功后再发现一半条件不满足？
+```
+
+### Week 7 Exit Gate
+
+```text
+能匹配真实 producer-consumer chain
+正例、multi-use、layout/dtype 和 side-effect 负例通过
+能解释 PatternBenefit、legality 和 termination
+```
+
+---
+
+## Week 8：DialectConversion、Legality 与 TypeConverter
+
+**Files:**
+
+- Create: `test/lib/Transforms/MiniArithToLLVMConversionPass.cpp`
+- Modify: `test/lib/Transforms/CMakeLists.txt`
+- Modify: `tools/mlir-opt/mlir-opt.cpp`
+- Create: `mlir/tests/mini-arith-to-llvm.mlir`
+- Create: `mlir/tests/mini-arith-to-llvm-invalid.mlir`
+- Create: `docs/dialect_conversion_notes.md`
+
+### 工作日
+
+- [ ] **周一：阅读真实 conversion pass**
+
+重点阅读：
+
+```text
+docs/DialectConversion.md
+test/lib/Conversion/FuncToLLVM/TestConvertCallOp.cpp
+include/mlir/Conversion/Passes.td
+```
+
+画出 ConversionTarget、TypeConverter、ConversionPattern、materialization 与 driver 的关系。
+
+- [ ] **周二：定义 ConversionTarget**
+
+构造最小 module：将选定 `arith` op 标记 illegal，将 LLVM dialect 和必要容器 op 标记 legal；分别记录 static、dynamic 和 recursive legality 的用途。
+
+- [ ] **周三：接入 LLVMTypeConverter 和 patterns**
+
+使用 upstream Arith/Func/ControlFlow to LLVM conversion patterns；不手写已有的 LLVM lowering。打印转换前后 function signature、operand/result type。
+
+- [ ] **周四：比较 partial 与 full conversion**
+
+同一输入分别调用 `applyPartialConversion` 和 `applyFullConversion`，构造一个残留 illegal op，确认两者失败边界和诊断不同。
+
+- [ ] **周五：观察 materialization**
+
+构造需要 source/target materialization 的类型边界，记录 unrealized conversion cast 何时出现、为什么最终需要 reconcile 或合法 materialization。
+
+### 周末
+
+- [ ] **周六：写 conversion 正例和失败测试**
+
+覆盖合法 module、残留 illegal op、无法转换类型和动态 legality；失败测试使用 `-verify-diagnostics`。
+
+- [ ] **周日：写转换不变量**
+
+说明：
+
+```text
+哪些 dialect/op 在 pass 后必须全部消失？
+容器 op 为什么可能保持 legal？
+TypeConverter 为什么不仅转换 result type？
+conversion failure 后能否假设 IR 自动 rollback？
+```
+
+### Week 8 Exit Gate
+
+```text
+能独立配置 ConversionTarget 和 TypeConverter
+能解释 partial/full conversion 和 materialization
+正例与残留 illegal op 负例通过
+```
+
+---
+
+## Week 9：Transform Dialect 与结构化 Op Interfaces
 
 **Files:**
 
 - Create: `mlir/transform_matmul_tiling.mlir`
 - Create: `mlir/tests/transform_matmul_tiling.mlir`
 - Create: `docs/mlir_tiling_notes.md`
+- Create: `docs/structured_op_interfaces.md`
 
 ### 工作日
 
-- [ ] **周一：运行仓库现有 tiling 测试**
+- [ ] **周一：运行 tiling 测试并定位 interfaces**
 
 ```bash
 $MLIR_BIN/llvm-lit -sv \
   test/Interfaces/TilingInterface/tile-using-scfforall.mlir
 $MLIR_BIN/llvm-lit -sv \
   test/Dialect/Linalg/transform-op-tile.mlir
+```
+
+阅读：
+
+```text
+include/mlir/Interfaces/DestinationStyleOpInterface.td
+include/mlir/Interfaces/TilingInterface.td
+include/mlir/Interfaces/InferTypeOpInterface.td
+include/mlir/Dialect/Linalg/IR/LinalgStructuredOps.td
 ```
 
 - [ ] **周二：抽取最小 linalg.matmul case**
@@ -655,7 +897,7 @@ Transform IR 必须只匹配目标 `linalg.matmul`，不能依赖文件中只有
 
 第一版 tile size 固定 `64x64x32`，保存 transformation 前后 IR。
 
-- [ ] **周五：解释 TilingInterface**
+- [ ] **周五：解释 DestinationStyle、Tiling 与 Reify Interfaces**
 
 阅读：
 
@@ -664,7 +906,7 @@ include/mlir/Interfaces/TilingInterface.h
 lib/Dialect/SCF/Transforms/TileUsingInterface.cpp
 ```
 
-写出 destination、iteration domain、tiled implementation 和 result replacement 的关系。
+写出 destination/init、iteration domain、tiled implementation、result replacement 和 shape reification 的关系；说明 tiling algorithm 为什么依赖接口而不是硬编码每个 Linalg op。
 
 ### 周末
 
@@ -684,24 +926,28 @@ tiled linalg.matmul
 result insertion
 ```
 
-### Week 6 Exit Gate
+### Week 9 Exit Gate
 
 ```text
 两个 upstream lit 测试通过
 自定义 tiling case 的整除/非整除测试通过
+能解释 DestinationStyleOpInterface、TilingInterface 和 shape reification 的分工
 能解释 tile transformation 不是简单文本替换
 ```
 
 ---
 
-## Week 7：C++ 参数化 Tiling Transformation
+## Week 10：C++ 参数化 Tiling 与 IR Evolution
 
 **Files:**
 
-- Create: `mlir/MatmulTilingPass.cpp`
+- Create: `test/lib/Transforms/MatmulTilingPass.cpp`
+- Modify: `test/lib/Transforms/CMakeLists.txt`
+- Modify: `tools/mlir-opt/mlir-opt.cpp`
 - Create: `mlir/tests/matmul-tiling-pass.mlir`
 - Create: `mlir/tests/matmul-tiling-invalid.mlir`
 - Update: `docs/mlir_tiling_notes.md`
+- Create: `mlir/tests/matmul-tiling-bufferize-vectorize.mlir`
 
 ### 工作日
 
@@ -737,7 +983,16 @@ tile-k
 
 - [ ] **周六：构建并运行全部测试**
 
-将 pass 接入与 AddZero 相同的 test-only 构建路径，运行目标 build 和两个测试文件。
+将 pass 接入与 AddZero 相同的 test-only 构建路径，运行目标 build 和三个测试文件。增加一条 IR evolution pipeline：
+
+```text
+linalg.matmul
+  -> tiled linalg + scf
+  -> one-shot-bufferize
+  -> vectorization candidate / vector IR
+```
+
+记录 tiling 前后 destination、extract/insert slice、buffer allocation/copy 和 vector op 变化；此周不要求完整 lowering 到可执行 GPU binary。
 
 - [ ] **周日：写 transformation legality 说明**
 
@@ -756,14 +1011,15 @@ tile-k
 ```text
 能够从空文件实现参数化 matmul tiling pass
 正例、负例、边界测试通过
-能够解释 folding/pattern/tiling/legality 的区别
+能够解释 folding/pattern/conversion/tiling/legality 的区别
+能够说明 tiling 如何影响后续 bufferization/vectorization
 ```
 
 ---
 
 ## 5. Phase 3：Triton Compiler 内部
 
-## Week 8：固定 Triton 源码与构建
+## Week 11：固定 Triton 源码与构建
 
 **Files:**
 
@@ -834,7 +1090,7 @@ python $TRITON_ROOT/python/tutorials/03-matrix-multiplication.py
 
 保存 Triton commit、其 LLVM hash、Python、compiler、CMake、Ninja 和 build flags。不得只写“使用最新版”。
 
-### Week 8 Exit Gate
+### Week 11 Exit Gate
 
 ```text
 editable Triton 从源码 import
@@ -845,7 +1101,7 @@ baseline commit 和 LLVM revision 已记录
 
 ---
 
-## Week 9：TTIR、TTGIR、LLVM IR、PTX 对照
+## Week 12：TTIR、TTGIR、LLVM IR、PTX 对照
 
 **Files:**
 
@@ -892,7 +1148,7 @@ python $CAPSTONE/triton_kernels/vector_add.py
 
 清理 Triton cache 后重新运行一次；确认脚本能重新生成同类 artifact，并记录 cache 对 dump 的影响。
 
-### Week 9 Exit Gate
+### Week 12 Exit Gate
 
 ```text
 四级 IR/PTX artifact 可复现
@@ -902,7 +1158,7 @@ python $CAPSTONE/triton_kernels/vector_add.py
 
 ---
 
-## Week 10：第一个 Triton Compiler 改动
+## Week 13：第一个 Triton Compiler 改动
 
 **Files:**
 
@@ -977,7 +1233,7 @@ git -C $TRITON_ROOT diff > $CAPSTONE/compiler/patches/week10.patch
 
 ## 6. Phase 4：冻结 Fused Linear Baseline
 
-## Week 11：标准 Shape 与 Correctness Harness
+## Week 14：标准 Shape 与 Correctness Harness
 
 **Files:**
 
@@ -1027,13 +1283,13 @@ SHAPES = [
 bash $CAPSTONE/scripts/run_correctness.sh
 ```
 
-Expected：全部 case PASS；任何失败先修 correctness，不进入 Week 12。
+Expected：全部 case PASS；任何失败先修 correctness，不进入 Week 15。
 
 - [ ] **周日：运行 compute-sanitizer/边界复盘**
 
 对可独立 launch 的最小 kernel 执行 memcheck，记录 mask 和 boundary tile 行为。
 
-### Week 11 Exit Gate
+### Week 14 Exit Gate
 
 ```text
 六组 shape、十组 seed 和边界 case 全部正确
@@ -1043,7 +1299,7 @@ Expected：全部 case PASS；任何失败先修 correctness，不进入 Week 12
 
 ---
 
-## Week 12：Autotune 与 Benchmark Harness
+## Week 15：Autotune 与 Benchmark Harness
 
 **Files:**
 
@@ -1095,7 +1351,7 @@ bash $CAPSTONE/scripts/run_benchmark.sh --provider baseline --rounds 3
 
 报告每个 shape 三轮 median 的最大相对偏差；如果温度、时钟或共享实例负载导致异常，重新测量并保留被废弃记录及原因。
 
-### Week 12 Exit Gate
+### Week 15 Exit Gate
 
 ```text
 autotune search space 已冻结
@@ -1106,7 +1362,7 @@ compile time 与 steady-state latency 分离
 
 ---
 
-## Week 13：Baseline Profiler 与 IR/SASS Artifact
+## Week 16：Profiler、IR/SASS Artifact 与 Baseline Freeze
 
 **Files:**
 
@@ -1115,6 +1371,10 @@ compile time 与 steady-state latency 分离
 - Populate: `profiles/nsys/baseline/`
 - Populate: `ir/*/baseline/`
 - Create: `results/baseline/profiler-summary.csv`
+- Create: `docs/baseline_report.md`
+- Create: `results/baseline/MANIFEST.md`
+- Update: `compiler/baseline_commit.txt`
+- Update: `README.md`
 
 ### 工作日
 
@@ -1134,13 +1394,13 @@ compile time 与 steady-state latency 分离
 
 重点选择小 M、大 K 和大型方阵三组，避免对六组全部使用高开销 full replay。
 
-- [ ] **周五：导出 PTX/SASS**
+- [ ] **周五：导出 PTX/SASS 并写 baseline report**
 
-保存与 profiler 中 kernel 对应的 PTX/SASS，并记录 hash，避免把不同 binary 的结果混在一起。
+保存与 profiler 中 kernel 对应的 PTX/SASS，并记录 hash；核对 workload、environment 和 autotune contract，开始填写 baseline report。
 
 ### 周末
 
-- [ ] **周六：建立瓶颈矩阵**
+- [ ] **周六：建立瓶颈矩阵并做冷启动复现**
 
 每个 shape 填写：
 
@@ -1156,80 +1416,37 @@ Tensor Core utilization
 top stall reason
 ```
 
-- [ ] **周日：写三个候选假设，不修改代码**
+在新 shell 中仅依据 README 重跑六组 correctness 和一轮 benchmark，与 Week 15 三轮数据比较。
 
-每个假设必须包含对应证据和预期指标变化。此周禁止提前实现优化。
+- [ ] **周日：冻结 baseline 并写三个候选假设**
 
-### Week 13 Exit Gate
-
-```text
-baseline kernel launch 边界确认公平
-重点 shape 有 ncu report 和对应 binary artifact
-候选假设由指标触发，而非凭直觉选择
-```
-
----
-
-## Week 14：冻结 Baseline
-
-**Files:**
-
-- Create: `docs/baseline_report.md`
-- Create: `results/baseline/MANIFEST.md`
-- Update: `compiler/baseline_commit.txt`
-- Update: `README.md`
-
-### 工作日
-
-- [ ] **周一：核对 workload contract**
-
-逐项确认 dtype、layout、FP32 accumulation、fusion、六组 shape 和误差标准未漂移。
-
-- [ ] **周二：核对环境 contract**
-
-确认 GPU、driver、CUDA、Triton commit、PyTorch、power/clock 和测量命令完整。
-
-- [ ] **周三：核对 artifact hash**
-
-为 baseline CSV、kernel source、configs、PTX/SASS 和 profiler report 记录 hash/commit。
-
-- [ ] **周四：写 baseline report**
-
-必须回答总计划 Section 10.3 的七个问题。
-
-- [ ] **周五：做冷启动复现**
-
-在新 shell 中仅根据 README 运行 correctness 和一个 benchmark shape。
-
-### 周末
-
-- [ ] **周六：完整冻结验证**
-
-重跑六组 correctness 和一轮 benchmark，和 Week 12 数据比较。
-
-- [ ] **周日：签署 baseline freeze**
-
-在 `MANIFEST.md` 写入日期、commit、配置、命令和冻结声明。后续若改 baseline，必须重新运行全部实验。
+在 `MANIFEST.md` 写入 commit、环境、配置、命令和 artifact hash；每个候选假设必须包含 profiler 证据和预期指标变化。此周禁止提前实现优化。
 
 ### Phase 4 Exit Gate
 
 ```text
 六组 correctness PASS
 三轮 benchmark 可复现
+baseline kernel launch 边界确认公平
+重点 shape 有 ncu report 和对应 binary artifact
 baseline workload/config/environment 已冻结
 baseline report 和 manifest 完整
+候选假设由指标触发，而非凭直觉选择
 ```
 
 ---
 
 ## 7. Phase 5：Profiler 驱动的 Compiler 优化
 
-## Week 15：选择唯一主瓶颈并设计实验
+## Week 17：选择唯一主瓶颈并实现 Experiment 01
 
 **Files:**
 
 - Create: `docs/optimization_design.md`
 - Create: `results/experiments/exp01/README.md`
+- Create: `compiler/tests/exp01.mlir`
+- Create: `compiler/reproducers/exp01.mlir`
+- Create: `compiler/patches/exp01.patch`
 
 ### 工作日
 
@@ -1264,84 +1481,34 @@ while <known cost> may regress <other set>.
 
 compiler change 必须能够显式开关；baseline 和 experiment 由同一 binary/commit 下的 flag 区分，或精确记录两个 commit。
 
-- [ ] **周五：设计 compiler test**
+- [ ] **周五：写并运行失败的 compiler test**
 
-先定义输入 reproducer 和稳定 IR 检查，不使用 latency 作为 compiler 单测。
+先定义输入 reproducer 和稳定 IR 检查，不使用 latency 作为 compiler 单测。Expected：baseline compiler 下新增 FileCheck 失败。
 
 ### 周末
 
-- [ ] **周六：完成 design review checklist**
+- [ ] **周六：实现最小 compiler change 并运行 test**
 
-检查语义、适用范围、失败方式、compile-time、code-size、回退策略和 test coverage。
+只实现足以让 reproducer 发生预期变化的最小逻辑；运行目标 test 和相关 Triton test 子集。Expected：新增 test PASS。
 
-- [ ] **周日：只跑 baseline sanity**
+- [ ] **周日：运行 correctness 并导出 artifact**
 
-确认 baseline 仍与冻结数据一致，然后批准进入实现。
+六组 shape 和固定 seed 全部通过后，保存 compiler diff、test、TTIR/TTGIR/LLVM/PTX before/after 和 patch。
 
-### Week 15 Exit Gate
+### Week 17 Exit Gate
 
 ```text
 唯一主瓶颈已由 profiler 证据确定
 假设包含预期 IR 和硬件指标变化
 compiler change 可开关
-测试设计先于实现
-```
-
----
-
-## Week 16：Experiment 01 实现与 Compiler Test
-
-**Files:**
-
-- Modify: exact Triton pass selected in Week 15
-- Create: `compiler/tests/exp01.mlir`
-- Create: `compiler/reproducers/exp01.mlir`
-- Create: `compiler/patches/exp01.patch`
-
-### 工作日
-
-- [ ] **周一：写并运行失败测试**
-
-Expected：baseline compiler 下新增 FileCheck 失败，因为预期 transformation 尚未发生。
-
-- [ ] **周二：实现最小 compiler change**
-
-只实现足以让单个 reproducer 变化的最小逻辑，不同时重构相邻 pass。
-
-- [ ] **周三：运行目标 test**
-
-Expected：新增 test PASS；保存测试命令和输出摘要。
-
-- [ ] **周四：运行相关 Triton test 子集**
-
-至少覆盖目标 dialect/pass 目录和 fused_linear kernel smoke test。
-
-- [ ] **周五：检查生成 IR diff**
-
-确认差异符合 Week 15 预测，没有意外 dtype、layout 或 fusion 变化。
-
-### 周末
-
-- [ ] **周六：跑完整 correctness**
-
-六组 shape 和十 seed 全部 PASS 后才允许跑性能。
-
-- [ ] **周日：导出 patch 和 artifact**
-
-保存 compiler diff、test、TTIR/TTGIR/LLVM/PTX before/after。
-
-### Week 16 Exit Gate
-
-```text
 新增 compiler test 经 red/green 验证
-相关 test 子集通过
-完整 correctness 通过
+相关 test 子集和完整 correctness 通过
 IR diff 与设计预测一致
 ```
 
 ---
 
-## Week 17：Experiment 01 Benchmark、Profiler 与 Ablation
+## Week 18：Experiment 01 Benchmark、Profiler 与 Ablation
 
 **Files:**
 
@@ -1393,7 +1560,7 @@ REJECTED：证据否定假设
 INCONCLUSIVE：噪声或指标不足
 ```
 
-### Week 17 Exit Gate
+### Week 18 Exit Gate
 
 ```text
 三轮结果和 ncu 对照完整
@@ -1403,7 +1570,7 @@ INCONCLUSIVE：噪声或指标不足
 
 ---
 
-## Week 18：Experiment 02 针对首轮结论迭代
+## Week 19：Experiment 02 针对首轮结论迭代
 
 **Files:**
 
@@ -1443,7 +1610,7 @@ bash $CAPSTONE/scripts/run_ncu.sh --provider exp02
 
 - [ ] **周日：ablation 和结论**
 
-### Week 18 Exit Gate
+### Week 19 Exit Gate
 
 ```text
 Exp02 与 Exp01 只存在一个主要变量差异
@@ -1452,7 +1619,7 @@ compiler test/correctness/benchmark/profiler/ablation 完整
 
 ---
 
-## Week 19：Experiment 03 与优化候选冻结
+## Week 20：Experiment 03 与优化候选冻结
 
 **Files:**
 
@@ -1510,12 +1677,12 @@ bash $CAPSTONE/scripts/run_ncu.sh --provider exp03
 
 ## 8. Phase 6：泛化与回归
 
-## Week 20：邻近 Shape 与边界泛化
+## Week 21：邻近 Shape 与边界泛化
 
 **Files:**
 
 - Create: `benchmark/generalization_shapes.py`
-- Create: `results/regression/week20-generalization.csv`
+- Create: `results/regression/week21-generalization.csv`
 - Create: `docs/optimization_scope.md`
 
 ### 工作日
@@ -1542,7 +1709,7 @@ bash $CAPSTONE/scripts/run_ncu.sh --provider exp03
 
 条件必须能由 compiler 在编译期判断，例如静态 M/N/K、layout、dtype，而不是“某些情况更快”。
 
-### Week 20 Exit Gate
+### Week 21 Exit Gate
 
 ```text
 邻近 shape 不是事后挑选
@@ -1552,60 +1719,13 @@ bash $CAPSTONE/scripts/run_ncu.sh --provider exp03
 
 ---
 
-## Week 21：性能回归 Harness
+## Week 22：Regression Harness、最终 Patch 与范围冻结
 
 **Files:**
 
 - Create: `benchmark/regression.py`
 - Create: `scripts/run_regression.sh`
 - Create: `results/regression/thresholds.json`
-
-### 工作日
-
-- [ ] **周一：定义 correctness gate**
-
-regression 脚本首先跑 correctness，失败立即终止性能阶段。
-
-- [ ] **周二：定义性能阈值**
-
-硬标准：六组中至少四组达到 baseline 90%，任何一组不低于 80%。阈值考虑已测量噪声，但不能放宽硬标准。
-
-- [ ] **周三：实现 CSV/JSON 输出**
-
-- [ ] **周四：实现非零退出码**
-
-correctness 或硬性能门槛失败时脚本返回非零。
-
-- [ ] **周五：制造一次预期失败**
-
-临时使用明显不利配置，验证 regression harness 确实失败；随后恢复候选。
-
-### 周末
-
-- [ ] **周六：运行正式 regression**
-
-```bash
-bash $CAPSTONE/scripts/run_regression.sh
-```
-
-- [ ] **周日：记录 compile-time/code-size**
-
-比较 baseline 与候选的 compiler time、PTX/SASS size 和 cache artifact。
-
-### Week 21 Exit Gate
-
-```text
-regression harness 有真实 red/green 验证
-错误会返回非零
-correctness、性能、compile-time 和 code-size 均被记录
-```
-
----
-
-## Week 22：完整泛化报告与最终 Patch
-
-**Files:**
-
 - Create: `compiler/patches/final.patch`
 - Create: `results/regression/final.csv`
 - Finalize: `docs/optimization_scope.md`
@@ -1613,17 +1733,28 @@ correctness、性能、compile-time 和 code-size 均被记录
 
 ### 工作日
 
-- [ ] **周一：清理 compiler diff**
+- [ ] **周一：实现 correctness 和性能 gate**
 
-移除 debug print、无关格式变化和未使用 flag；不做与优化无关的大重构。
+regression 首先运行 correctness；性能硬标准为六组中至少四组达到 baseline 90%，任何一组不低于 80%。失败立即返回非零。
 
-- [ ] **周二：运行 compiler test 子集**
+- [ ] **周二：实现 CSV/JSON 输出并做预期失败**
 
-- [ ] **周三：运行完整 correctness**
+临时使用明显不利配置，确认 regression harness 返回非零；恢复候选后确认通过，保存 red/green 结果。
 
-- [ ] **周四：运行正式 regression**
+- [ ] **周三：清理 compiler diff 并运行 test 子集**
+
+移除 debug print、无关格式变化和未使用 flag；不做无关重构。运行目标 compiler tests 和相关 Triton 子集。
+
+- [ ] **周四：运行完整 correctness 与正式 regression**
+
+```bash
+bash $CAPSTONE/scripts/run_correctness.sh
+bash $CAPSTONE/scripts/run_regression.sh
+```
 
 - [ ] **周五：导出 final patch 和 artifact hash**
+
+同时记录 compile-time、PTX/SASS size 和 cache artifact delta。
 
 ### 周末
 
@@ -1641,6 +1772,7 @@ correctness、性能、compile-time 和 code-size 均被记录
 final patch 干净且有 compiler test
 完整 correctness/regression 通过硬门槛
 泛化、最坏退化和适用范围明确
+regression harness 经真实 red/green 验证且失败返回非零
 ```
 
 ---
@@ -1830,9 +1962,14 @@ SUPPORTED / REJECTED / INCONCLUSIVE
 
 ### Phase 2
 
+- [ ] 能用 IR 样例解释 SSA、use-def、dominance、pass anchor 和 analysis invalidation
 - [ ] AddZero red/green 证明自定义 pattern 生效
+- [ ] Linear + Bias + ReLU 多 Op rewrite 的正例、multi-use、side-effect 和不匹配测试通过
+- [ ] 最小 DialectConversion pass 覆盖 legality、type conversion、materialization 和失败诊断
+- [ ] 能解释 DestinationStyleOpInterface、TilingInterface 和 reification 在结构化变换中的职责
 - [ ] Transform Dialect matmul tiling 整除/非整除测试通过
 - [ ] C++ 参数化 tiling pass 正例/负例/边界测试通过
+- [ ] 保存 tiling、bufferization、vectorization 各阶段 IR，并解释每一步的合法性与语义保持条件
 
 ### Phase 3
 
@@ -1878,7 +2015,7 @@ SUPPORTED / REJECTED / INCONCLUSIVE
 
 ```text
 CUDA/Triton 基础
-MLIR tiling bridge
+MLIR Transformation bridge：多 Op rewrite、DialectConversion、结构化 tiling
 Triton compiler change
 冻结 baseline
 一次完整优化实验
