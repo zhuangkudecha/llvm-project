@@ -65,7 +65,10 @@ Create the following files under `LearningSteps/IllustratedMLIR/`:
 06_From_Textual_IR_To_Objects.md
 ```
 
-The displayed titles and all explanatory prose are Chinese. ASCII filenames avoid tooling and link portability issues.
+The displayed titles, explanatory prose, diagram titles, Mermaid node labels, edge labels, legends, captions, and
+diagram walkthroughs are written to disk in Chinese. Necessary MLIR identifiers such as `Operation`, `Region`, and
+`Block` retain their original spelling and appear together with a Chinese explanation. ASCII filenames avoid tooling
+and link portability issues.
 
 Phase one creates the directory, the reading map, and chapter 1 only. The remaining chapters are expanded after the
 first chapter establishes a validated template.
@@ -125,7 +128,9 @@ The series uses three recurring diagram views:
 
 Complex diagrams are built progressively. The first view shows only the conclusion and outline; later views add
 containment, dataflow, textual IR mapping, and finally C++ object mapping. Mermaid nodes and edges must remain readable
-in a light Markdown preview without relying on color alone.
+in a light Markdown preview without relying on color alone. All reader-facing text inside and around a diagram is
+stored in Chinese; raw dialect names, operation names, SSA names, class names, and API names remain unchanged where
+translation would make them technically inaccurate.
 
 ## 7. Relationship to Existing Notes
 
@@ -162,4 +167,3 @@ Phase one produces:
 
 Passes, PatternRewriter, DialectConversion, and end-to-end lowering are explicitly outside phase one. They belong to a
 later volume after the basic IR object model is established.
-
