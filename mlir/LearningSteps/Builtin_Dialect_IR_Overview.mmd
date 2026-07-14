@@ -1,0 +1,34 @@
+flowchart TB
+    Context["MLIRContext\n管理 builtin dialect 和唯一化对象"]
+    Module["builtin.module\n文本中通常写作 module\n顶层 Operation"]
+    Region["Region\nOperation 的区域"]
+    Block["Block\n基本块 / 参数列表"]
+    Op["Operation\n例如 func.func、arith.constant\n具体 op 可来自其他 dialect"]
+    Result["SSA Value\nOperation 的结果"]
+    Operand["SSA Value\nOperation 的输入"]
+    Type["Builtin Types\ni32、index、tensor<...>、memref<...>\n描述 value 的类型"]
+    Attr["Builtin Attributes\n常量、配置、符号、布局\n例如 DenseElementsAttr"]
+    Loc["Location Attribute\n源码位置 / 诊断信息"]
+    Interface["Type Interfaces\n为多种 Type 提供统一能力"]
+    Dialect["其他 Dialects\nfunc、arith、memref、tensor...\n提供领域语义"]
+
+    Context --> Module
+    Module --> Region
+    Region --> Block
+    Block --> Op
+    Op --> Result
+    Result --> Type
+    Op --> Operand
+    Op -. 携带 .-> Attr
+    Op -. 携带 .-> Loc
+    Type -. 实现 / 使用 .-> Interface
+    Dialect -. 定义具体 Operation .-> Op
+
+    classDef builtin fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#111827;
+    classDef structure fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#111827;
+    classDef attached fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#111827;
+    classDef external fill:#f3e8ff,stroke:#9333ea,stroke-width:2px,color:#111827;
+
+    class Context,Module,Type,Attr,Loc,Interface builtin;
+    class Region,Block,Op,Result,Operand structure;
+    class Dialect external;

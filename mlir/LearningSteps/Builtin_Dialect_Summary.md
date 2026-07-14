@@ -21,6 +21,30 @@ Attributes、Location Attributes、Ops、Types、Type Interfaces 文档。因此
 Builtin dialect 时，不应该只看 `docs/Dialects/Builtin.md` 这个壳文件，也要看
 `include/mlir/IR/Builtin*.td`。
 
+先用一张图建立整体印象：Builtin dialect 不是某一个具体领域的 dialect，而是
+MLIR IR 自己依赖的基础层。
+
+```mermaid
+flowchart TB
+    Context[MLIRContext\n隐式加载 Builtin dialect]
+    Builtin[Builtin dialect\nMLIR IR 基础设施]
+    Attr[Attributes\n常量 / 配置 / 符号 / location]
+    Ops[Operations\nmodule / unrealized_conversion_cast]
+    Types[Types\ninteger / float / index / tensor / memref]
+    Interfaces[Type Interfaces\n跨类型共享能力]
+    Users[其他 dialect、parser、printer、pass、diagnostic\n都可以复用]
+
+    Context --> Builtin
+    Builtin --> Attr
+    Builtin --> Ops
+    Builtin --> Types
+    Builtin --> Interfaces
+    Attr --> Users
+    Ops --> Users
+    Types --> Users
+    Interfaces --> Users
+```
+
 ## 一、Builtin dialect 是什么
 
 Builtin dialect 包含 MLIR IR 最核心的一组：
@@ -66,6 +90,22 @@ Builtin dialect 的影响范围非常大，而 MLIR 又强调可扩展性，所�
 都可能依赖它。普通领域概念更应该放到自己的 dialect，而不是放进 builtin。
 
 ## 二、Builtin.md 的文档结构
+
+文档阅读路径可以看成下面这条链：`.td` 是定义来源，`CMake` 调用
+`mlir-tblgen` 生成各个 Markdown 片段，`Builtin.md` 再通过 include 组合它们。
+
+```mermaid
+flowchart LR
+    TD[include/mlir/IR/Builtin*.td\nTableGen 定义]
+    CMake[include/mlir/IR/CMakeLists.txt\nadd_mlir_doc]
+    Tblgen[mlir-tblgen\n生成文档]
+    Fragments[生成的文档片段\nBuiltinAttributes.md\nBuiltinOps.md\nBuiltinTypes.md]
+    Entry[docs/Dialects/Builtin.md\n文档入口]
+    Reader[学习者看到的\nBuiltin Dialect 文档]
+
+    TD --> CMake --> Tblgen --> Fragments
+    Fragments --> Entry --> Reader
+```
 
 `docs/Dialects/Builtin.md` 的结构是：
 
@@ -264,6 +304,18 @@ FloatType
 ```
 
 也就是把一个编译期常量 tensor/vector 放进 IR。
+
+两种 dense attribute 的选择，可以用“数据形状”来判断：
+
+```mermaid
+flowchart TD
+    Start["需要保存一组 dense 数据"] --> Shape{"是否有 shaped type？"}
+    Shape -->|否：一维 primitive array| Array["DenseArrayAttr\narray<i32: 10, 42>\n适合 ArrayRef<T>"]
+    Shape -->|是：tensor 或 vector| Elements["DenseIntOrFPElementsAttr\ndense<[1, 2, 3]> : tensor<3xi32>\n支持多维和 splat"]
+    Elements --> Kind{"元素类型"}
+    Kind --> Integer["IntegerType"]
+    Kind --> Float["FloatType"]
+```
 
 ### 3.5 DenseStringElementsAttr
 
@@ -703,6 +755,28 @@ GraphRegionNoTerminator
 ```
 
 这些 trait 说明它的语义：
+
+下面把一个最小 IR 的“容器关系”和“附着关系”分开看：Operation 是树的节点，
+而 Type、Attribute、Location 是附着在节点或 SSA value 上的描述信息。
+
+```mermaid
+flowchart TD
+    M["builtin.module\n打印为 module"]
+    F["func.func @foo\nOperation"]
+    Arg["%arg0\nSSA value : i32"]
+    C["arith.constant\nOperation"]
+    Dense["dense<[1.0, 2.0]>\nDenseIntOrFPElementsAttr"]
+    Tensor["tensor<2xf32>\nRankedTensorType"]
+    Loc["Location\n诊断 / debug 信息"]
+
+    M --> F
+    F --> Arg
+    F --> C
+    C --> Dense
+    C --> Tensor
+    M -. 附着 .-> Loc
+    F -. 函数签名使用 .-> Tensor
+```
 
 ```text
 AffineScope:
@@ -1491,6 +1565,18 @@ dense<[1.0, 2.0]> : tensor<2xf32>
 ```
 
 ## 十三、总结
+
+最后用一张“从文本到核心对象”的速记图收束：
+
+```mermaid
+flowchart LR
+    Text["MLIR 文本\nmodule / i32 / dense<...> / loc(...)"]
+    Parse["Parser / IR 构造"]
+    Core["Builtin 核心对象\nModuleOp / IntegerType\nDenseElementsAttr / LocationAttr"]
+    Pass["Pass、Rewrite、Type system\n继续消费这些对象"]
+
+    Text --> Parse --> Core --> Pass
+```
 
 Builtin dialect 的核心作用是：
 
