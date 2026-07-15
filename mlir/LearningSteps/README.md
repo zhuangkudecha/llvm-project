@@ -72,7 +72,7 @@
 
 ### Practices
 
-- [SSA use-def 输入](Practices/ir_ssa_walk.mlir)与[分析笔记](Practices/mlir_ir_ssa_notes.md)
+- SSA use-def：[输入](Practices/ir_ssa_walk.mlir) · [填空练习](Practices/mlir_ir_ssa_exercise.md) · [完整分析](Practices/mlir_ir_ssa_notes.md)
 - [canonicalize/CSE 与 FileCheck 输入](Practices/practice_canonicalize_cse.mlir)
 - [AddZeroPattern Pass 示例](Practices/rewrite-pattern-addi-zero/)
 - [AddZeroPattern 构建说明](Practices/rewrite-pattern-addi-zero/CMakeLists_notes.md)
