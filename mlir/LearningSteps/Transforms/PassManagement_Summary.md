@@ -87,7 +87,7 @@ MLIR PassManager 支持多线程执行，因此 pass 必须遵守几个限制：
 更详细的专题笔记见：
 
 ```text
-mlir/LearningSteps/PassManagement_OperationPass_Restrictions_Summary.md
+mlir/LearningSteps/Transforms/PassManagement_OperationPass_Restrictions_Summary.md
 ```
 
 ---
@@ -866,4 +866,3 @@ During execution:
 一句话总结：
 
 > `PassManagement.md` 的核心不是某个单独 pass 怎么写，而是 MLIR 如何把 pass、analysis、pipeline、注册、调试和复现机制组合成一个可扩展的编译器基础设施。
-

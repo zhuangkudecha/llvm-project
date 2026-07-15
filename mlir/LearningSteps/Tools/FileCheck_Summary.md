@@ -66,9 +66,9 @@ producer-command | FileCheck check-pattern-file
 例如：
 
 ```bash
-./build/bin/mlir-opt ./mlir/LearningSteps/practice_canonicalize_cse.mlir \
+./build/bin/mlir-opt ./mlir/LearningSteps/Practices/practice_canonicalize_cse.mlir \
   -pass-pipeline='builtin.module(func.func(cse,canonicalize))' \
-  | ./build/bin/FileCheck ./mlir/LearningSteps/practice_canonicalize_cse.mlir
+  | ./build/bin/FileCheck ./mlir/LearningSteps/Practices/practice_canonicalize_cse.mlir
 ```
 
 含义：
@@ -113,18 +113,18 @@ Ctrl-C
 也可以不用 pipe：
 
 ```bash
-./build/bin/mlir-opt ./mlir/LearningSteps/practice_canonicalize_cse.mlir \
+./build/bin/mlir-opt ./mlir/LearningSteps/Practices/practice_canonicalize_cse.mlir \
   -pass-pipeline='builtin.module(func.func(cse,canonicalize))' \
   > /tmp/out.mlir
 
-./build/bin/FileCheck ./mlir/LearningSteps/practice_canonicalize_cse.mlir \
+./build/bin/FileCheck ./mlir/LearningSteps/Practices/practice_canonicalize_cse.mlir \
   < /tmp/out.mlir
 ```
 
 或者：
 
 ```bash
-./build/bin/FileCheck ./mlir/LearningSteps/practice_canonicalize_cse.mlir \
+./build/bin/FileCheck ./mlir/LearningSteps/Practices/practice_canonicalize_cse.mlir \
   --input-file=/tmp/out.mlir
 ```
 
@@ -163,7 +163,7 @@ mlir-opt %s ...
 
 输入文件：
 
-[practice_canonicalize_cse.mlir](/home/fuhao/llvm-project/mlir/LearningSteps/practice_canonicalize_cse.mlir:1)
+[practice_canonicalize_cse.mlir](/home/fuhao/llvm-project/mlir/LearningSteps/Practices/practice_canonicalize_cse.mlir:1)
 
 核心 IR：
 

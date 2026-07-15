@@ -268,7 +268,7 @@ Use this source table:
 | `Value`、`BlockArgument`、`OpResult` | `include/mlir/IR/Value.h` |
 | `builtin.module` 的定义 | `include/mlir/IR/BuiltinOps.td` |
 
-Link `../Step1_IR_Structure_Summary.md`, `../Operations_Summary.md`, `../Builtin_Dialect_Summary.md`, and `../Phase2_Core_Infrastructure_Summary.md`.
+Link `../Foundations/Step1_IR_Structure_Summary.md`, `../ODS/Operations_Summary.md`, `../Dialects/Builtin_Dialect_Summary.md`, and `../Transforms/Phase2_Core_Infrastructure_Summary.md`.
 
 - [ ] **Step 7: Add misconceptions and the Chinese recap diagram**
 
@@ -359,10 +359,10 @@ Expected: the first command finds Chinese prose and diagram labels in both files
 
 ```bash
 test -f mlir/LearningSteps/IllustratedMLIR/examples/accumulate.mlir
-test -f mlir/LearningSteps/Step1_IR_Structure_Summary.md
-test -f mlir/LearningSteps/Operations_Summary.md
-test -f mlir/LearningSteps/Builtin_Dialect_Summary.md
-test -f mlir/LearningSteps/Phase2_Core_Infrastructure_Summary.md
+test -f mlir/LearningSteps/Foundations/Step1_IR_Structure_Summary.md
+test -f mlir/LearningSteps/ODS/Operations_Summary.md
+test -f mlir/LearningSteps/Dialects/Builtin_Dialect_Summary.md
+test -f mlir/LearningSteps/Transforms/Phase2_Core_Infrastructure_Summary.md
 git diff --check HEAD~3..HEAD
 ```
 

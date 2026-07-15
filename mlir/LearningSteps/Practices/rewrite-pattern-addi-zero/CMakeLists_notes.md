@@ -3,7 +3,7 @@
 这个练习文件在：
 
 ```text
-mlir/LearningSteps/rewrite-pattern-addi-zero/AddZeroPatternPass.cpp
+mlir/LearningSteps/Practices/rewrite-pattern-addi-zero/AddZeroPatternPass.cpp
 ```
 
 但是 `LearningSteps` 目录默认不属于 MLIR 的 CMake 构建树，所以只在这里新增
@@ -215,7 +215,7 @@ mlir/CMakeLists.txt
 加：
 
 ```cmake
-add_subdirectory(LearningSteps/rewrite-pattern-addi-zero)
+add_subdirectory(LearningSteps/Practices/rewrite-pattern-addi-zero)
 ```
 
 这会把学习目录变成正式构建目录，不适合这种临时实验。

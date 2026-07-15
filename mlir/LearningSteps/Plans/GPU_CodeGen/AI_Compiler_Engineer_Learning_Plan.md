@@ -427,7 +427,7 @@ first-rtx4090-benchmark.csv
 已有练习：
 
 ```text
-LearningSteps/rewrite-pattern-addi-zero/
+LearningSteps/Practices/rewrite-pattern-addi-zero/
 ```
 
 该练习已经覆盖：

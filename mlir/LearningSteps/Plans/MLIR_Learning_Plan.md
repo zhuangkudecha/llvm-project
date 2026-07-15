@@ -10,7 +10,7 @@ A structured course for learning the MLIR (Multi-Level Intermediate Representati
 
 | Step | Resource | Key Topics |
 |------|----------|------------|
-| 0 | `Phase2_AI_Compiler_Beginner_Guide.md` and selected MLIR overview docs | Model graph, tensor programs, dialect layers, lowering pipeline |
+| 0 | `../Transforms/Phase2_AI_Compiler_Beginner_Guide.md` and selected MLIR overview docs | Model graph, tensor programs, dialect layers, lowering pipeline |
 
 **Core map:**
 
@@ -77,7 +77,7 @@ Model graph / Tensor program
 
 **Milestone:** You can explain how `Operation`, `Value`, `Region`, `Block`, `Dialect`, `PassManager`, and `PatternRewriter` cooperate during an IR transformation.
 
-**Deliverable:** Maintain `Phase2_Core_Infrastructure_Summary.md` and `Phase2_AI_Compiler_Beginner_Guide.md`. Avoid spending too long on low-level implementation details such as `TrailingObjects` and `StorageUniquer` until they become necessary for a concrete debugging task.
+**Deliverable:** Maintain `../Transforms/Phase2_Core_Infrastructure_Summary.md` and `../Transforms/Phase2_AI_Compiler_Beginner_Guide.md`. Avoid spending too long on low-level implementation details such as `TrailingObjects` and `StorageUniquer` until they become necessary for a concrete debugging task.
 
 ---
 
