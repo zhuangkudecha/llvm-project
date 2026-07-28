@@ -50,7 +50,7 @@ $CAPSTONE/docs/*.md                     # 设计、IR 对照与失败记录
 
 ### 工作日
 
-- [ ] **周一：手写多 Region/Block IR**
+- [ x] **周一：手写多 Region/Block IR**
 
 在 `ir_ssa_walk.mlir` 中至少包含：
 
@@ -83,7 +83,7 @@ Expected：IR verifier 返回 0。
 
 - 必读：`include/mlir/IR/Value.h` 中 `Value`、`OpResult`、`BlockArgument` 与 use iterator — 逐项确定值的 owner、定义位置和 users，而不是只从文本名称猜测。
 
-- [ ] **周三：写 inspection pass**
+- [ ] **周三：写 inspection pass**  
 
 实现 `OperationPass<func::FuncOp>`，使用 `getOperation()->walk(...)` 统计 operation、region、block、value 和 use 数量；输出 deterministic test result。
 

@@ -53,6 +53,15 @@ flowchart LR
 
 第一阶段只完成第 1 章；其余标题是阅读路线预告，不代表内容已经落盘。
 
+进入变换主题时有两条配套路线：
+
+- [Phase 1 CUDA/Triton Kernel 基础](Phase1Fundamentals/00_Reading_Map.md)：从 GPU 执行模型、
+  正确测量、CUDA tiled matmul 到 Triton fused linear。
+- [Transformation 机制小册](Transformation/00_Reading_Map.md)：按 Pass、Pattern、Conversion、
+  Transform Dialect 分机制深入。
+- [Phase 2 Transformation Bridge](Phase2Bridge/00_Reading_Map.md)：按 GPU CodeGen Phase 2 的
+  Week 5–10 实验与 Exit Gate 串联图解。
+
 ## 图中的颜色约定
 
 | 颜色 | 表示的对象或语境 |
