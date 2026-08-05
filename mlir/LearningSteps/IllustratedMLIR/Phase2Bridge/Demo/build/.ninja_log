@@ -1,0 +1,14 @@
+# ninja log v6
+2258	2316	1785915954410571817	/home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/libPhase2Passes.so	c7256a7123dda43c
+1	2266	1785915599130577790	CMakeFiles/Phase2Passes.dir/passes/Phase2MatmulTiling.cpp.o	b22778796913843d
+1	2275	1785915599130577790	CMakeFiles/Phase2Passes.dir/passes/Phase2FuseChain.cpp.o	ac67517cc0ca5681
+1	356	1785915952150571904	CMakeFiles/Phase2Passes.dir/passes/PluginEntry.cpp.o	bd5f2e5c16f8633d
+2	857	1785927026410004778	/home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/build/cmake_install.cmake	1b3c80b650b5147a
+1	2258	1785915952150571904	CMakeFiles/Phase2Passes.dir/passes/Phase2Inspection.cpp.o	b7e3bd22feb665b9
+2	857	1785927026410004778	build.ninja	1b3c80b650b5147a
+2442	2508	1785835048521095728	/home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/libPhase2BridgePasses.so	d92ae18642b77ba6
+4	2442	1785835046081094551	CMakeFiles/Phase2BridgePasses.dir/passes/Phase2Inspection.cpp.o	425f83149e45a985
+4	765	1785927026410004778	build.ninja	1b3c80b650b5147a
+4	765	1785927026410004778	/home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/build/cmake_install.cmake	1b3c80b650b5147a
+4	2437	1785927026430004767	CMakeFiles/Phase2Passes.dir/passes/Phase2Inspection.cpp.o	b7e3bd22feb665b9
+2437	2515	1785927028860003503	/home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/libPhase2Passes.so	c7256a7123dda43c

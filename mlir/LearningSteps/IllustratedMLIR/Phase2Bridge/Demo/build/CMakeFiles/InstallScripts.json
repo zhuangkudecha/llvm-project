@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
