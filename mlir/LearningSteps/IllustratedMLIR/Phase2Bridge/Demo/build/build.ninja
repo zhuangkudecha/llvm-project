@@ -107,6 +107,24 @@ build CMakeFiles/Phase2Passes.dir/passes/Phase2Inspection.cpp.o: CXX_COMPILER__P
   OBJECT_FILE_DIR = CMakeFiles/Phase2Passes.dir/passes
   TARGET_SUPPORT_DIR = CMakeFiles/Phase2Passes.dir
 
+build CMakeFiles/Phase2Passes.dir/passes/Phase2AddZero.cpp.o: CXX_COMPILER__Phase2Passes_unscanned_ /home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/passes/Phase2AddZero.cpp || cmake_object_order_depends_target_Phase2Passes
+  DEFINES = -DPhase2Passes_EXPORTS
+  DEP_FILE = CMakeFiles/Phase2Passes.dir/passes/Phase2AddZero.cpp.o.d
+  FLAGS = -std=gnu++17 -fPIC -fno-rtti -fno-exceptions -fvisibility-inlines-hidden -ffunction-sections -fdata-sections
+  INCLUDES = -I/home/fuhao/llvm-project/mlir/include -I/home/fuhao/llvm-project/build/tools/mlir/include -I/home/fuhao/llvm-project/llvm/include -I/home/fuhao/llvm-project/build/include -I/home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/passes
+  OBJECT_DIR = CMakeFiles/Phase2Passes.dir
+  OBJECT_FILE_DIR = CMakeFiles/Phase2Passes.dir/passes
+  TARGET_SUPPORT_DIR = CMakeFiles/Phase2Passes.dir
+
+build CMakeFiles/Phase2Passes.dir/passes/Phase2FuseChain.cpp.o: CXX_COMPILER__Phase2Passes_unscanned_ /home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/passes/Phase2FuseChain.cpp || cmake_object_order_depends_target_Phase2Passes
+  DEFINES = -DPhase2Passes_EXPORTS
+  DEP_FILE = CMakeFiles/Phase2Passes.dir/passes/Phase2FuseChain.cpp.o.d
+  FLAGS = -std=gnu++17 -fPIC -fno-rtti -fno-exceptions -fvisibility-inlines-hidden -ffunction-sections -fdata-sections
+  INCLUDES = -I/home/fuhao/llvm-project/mlir/include -I/home/fuhao/llvm-project/build/tools/mlir/include -I/home/fuhao/llvm-project/llvm/include -I/home/fuhao/llvm-project/build/include -I/home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/passes
+  OBJECT_DIR = CMakeFiles/Phase2Passes.dir
+  OBJECT_FILE_DIR = CMakeFiles/Phase2Passes.dir/passes
+  TARGET_SUPPORT_DIR = CMakeFiles/Phase2Passes.dir
+
 build CMakeFiles/Phase2Passes.dir/passes/PluginEntry.cpp.o: CXX_COMPILER__Phase2Passes_unscanned_ /home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/passes/PluginEntry.cpp || cmake_object_order_depends_target_Phase2Passes
   DEFINES = -DPhase2Passes_EXPORTS
   DEP_FILE = CMakeFiles/Phase2Passes.dir/passes/PluginEntry.cpp.o.d
@@ -124,7 +142,7 @@ build CMakeFiles/Phase2Passes.dir/passes/PluginEntry.cpp.o: CXX_COMPILER__Phase2
 #############################################
 # Link the shared module /home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/libPhase2Passes.so
 
-build /home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/libPhase2Passes.so: CXX_MODULE_LIBRARY_LINKER__Phase2Passes_ CMakeFiles/Phase2Passes.dir/passes/Phase2Inspection.cpp.o CMakeFiles/Phase2Passes.dir/passes/PluginEntry.cpp.o
+build /home/fuhao/llvm-project/mlir/LearningSteps/IllustratedMLIR/Phase2Bridge/Demo/libPhase2Passes.so: CXX_MODULE_LIBRARY_LINKER__Phase2Passes_ CMakeFiles/Phase2Passes.dir/passes/Phase2Inspection.cpp.o CMakeFiles/Phase2Passes.dir/passes/Phase2AddZero.cpp.o CMakeFiles/Phase2Passes.dir/passes/Phase2FuseChain.cpp.o CMakeFiles/Phase2Passes.dir/passes/PluginEntry.cpp.o
   LINK_FLAGS = -shared -Wl,--allow-shlib-undefined
   OBJECT_DIR = CMakeFiles/Phase2Passes.dir
   POST_BUILD = :
