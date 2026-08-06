@@ -1,13 +1,11 @@
 
+#include "Phase2Passes.h"
 #include "mlir/IR/Matchers.h"
 #include "mlir/IR/PatternMatch.h"
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/LogicalResult.h"
 using namespace mlir;
 
 namespace {
@@ -15,11 +13,11 @@ namespace {
     struct AddZeroPattern : mlir::OpRewritePattern<arith::AddIOp> {
         using OpRewritePattern::OpRewritePattern;
 
-        llvm::LogicalResult matchAndRewrite(
+        LogicalResult matchAndRewrite(
             arith::AddIOp op,
             PatternRewriter &rewriter) const override {
-                llvm::APInt rhs;
-                if (!matchPattern(op.getRhs(), m_Constant(&rhs))) {
+                APInt rhs;
+                if (!matchPattern(op.getRhs(), m_ConstantInt(&rhs))) {
                     return failure();
                 }
 
@@ -35,11 +33,11 @@ namespace {
 
     struct AddZeroPass : PassWrapper<AddZeroPass, OperationPass<func::FuncOp>> {
 
-        StringRef getArgument() {
-            return "add-zero";
+        StringRef getArgument() const override {
+            return "phase2-add-zero";
         }
 
-        StringRef getDescription() {
+        StringRef getDescription() const override {
             return "replace x + 0 with x arith.add operation";
         }
 
@@ -58,3 +56,8 @@ namespace {
     };
 
 } // namespace
+
+
+void registerPhase2AddZeroPass() {
+    PassRegistration<AddZeroPass>();
+}

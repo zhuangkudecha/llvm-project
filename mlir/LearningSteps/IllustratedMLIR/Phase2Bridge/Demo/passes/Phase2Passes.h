@@ -19,6 +19,7 @@
 #define PHASE2_BRIDGE_PASSES_H
 
 void registerPhase2InspectionPass();
-
+void registerPhase2AddZeroPass();
+void registerFuseChainPass();
 #endif // PHASE2_BRIDGE_PASSES_H
 

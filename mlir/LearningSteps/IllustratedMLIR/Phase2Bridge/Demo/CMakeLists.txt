@@ -17,6 +17,8 @@ message(STATUS "LLVM_INCLUDE_DIRS = ${LLVM_INCLUDE_DIRS}")
 # mlir-opt 已导出 mlir::registerPass 等符号
 add_library(Phase2Passes MODULE
     passes/Phase2Inspection.cpp
+    passes/Phase2AddZero.cpp
+    passes/Phase2FuseChain.cpp
     passes/PluginEntry.cpp
 )
 

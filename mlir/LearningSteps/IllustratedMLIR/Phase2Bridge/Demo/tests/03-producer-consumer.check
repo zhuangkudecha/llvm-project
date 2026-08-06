@@ -1,0 +1,4 @@
+// CHECK-LABLE: func.func @fuses
+// CHECK-COUNT-1: linalg.generic
+// CHECK: arith.addf
+// CHECK: arith.maximumf

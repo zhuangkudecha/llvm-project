@@ -1,0 +1,5 @@
+// CHECK-LABEL: func.func @add_zero(
+// CHECK-SAME: %[[ARG:.*]]: i32) -> i32
+// CHECK-NOT: arith.constant
+// CHECK-NOT: arith.addi
+// CHECK: return %[[ARG]] : i32

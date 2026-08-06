@@ -23,6 +23,8 @@ mlirGetPassPluginInfo() {
         "v0.1",
         []() {
             registerPhase2InspectionPass();
+            registerPhase2AddZeroPass();
+            registerFuseChainPass();
         },
     };
 }
