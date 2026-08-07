@@ -32,6 +32,8 @@ struct AddZeroPattern : public OpRewritePattern<arith::AddIOp> {
 
 
 struct MyRewritePass: public PassWrapper<MyRewritePass, OperationPass<func::FuncOp>> {
+    MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(MyRewritePass)
+
     void runOnOperation() override {
         RewritePatternSet patterns(&getContext());
         patterns.add<AddZeroPattern>(&getContext());

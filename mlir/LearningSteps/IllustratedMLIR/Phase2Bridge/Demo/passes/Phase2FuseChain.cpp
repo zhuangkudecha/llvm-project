@@ -34,7 +34,7 @@ namespace {
             return false;
         }
 
-        auto addOp = llvm::dyn_cast<arith::AddIOp>(body.front());
+        auto addOp = llvm::dyn_cast<arith::AddFOp>(body.front());
         if (!addOp) {
             return false;
         }
@@ -87,7 +87,7 @@ namespace {
         if (!biasMaps[0].isIdentity()) return false;
         if (!biasMaps[1].getNumResults() != 1) return false;
 
-        auto biasDim = llvm::dyn_cast<AffineDimExpr>(biasMaps[0].getResult(0));
+        auto biasDim = llvm::dyn_cast<AffineDimExpr>(biasMaps[1].getResult(0));
         if (!biasDim || biasDim.getPosition() != 1) return false;
 
         if (!biasMaps[2].isIdentity()) return false;
@@ -111,14 +111,14 @@ namespace {
                     return rewriter.notifyMatchFailure(relu, "relu has no input");
                 } 
                 auto bias = relu.getDpsInputs()[0].getDefiningOp<linalg::GenericOp>();
+                if (!bias) {
+                    return rewriter.notifyMatchFailure(relu, "relu input is not defined by linalg.generic");
+                }
 
                 if (bias.getDpsInputs().empty()) {
                     return rewriter.notifyMatchFailure(relu, "bias has no input");
                 }
                 auto matmul = bias.getDpsInputs()[0].getDefiningOp<linalg::MatmulOp>();
-                if (!bias) {
-                    return rewriter.notifyMatchFailure(relu, "relu input is not defined by linalg.generic");
-                }
                 if (!matmul) {
                     return rewriter.notifyMatchFailure(relu, "bias input is not defined by linalg.matmul");
                 }
