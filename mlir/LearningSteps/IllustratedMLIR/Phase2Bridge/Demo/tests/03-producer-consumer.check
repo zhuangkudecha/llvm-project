@@ -1,4 +1,10 @@
-// CHECK-LABLE: func.func @fuses
-// CHECK-COUNT-1: linalg.generic
-// CHECK: arith.addf
-// CHECK: arith.maximumf
+// CHECK-LABEL: func.func @fuses(
+// CHECK: [[MATMUL:%[^ ]+]] = linalg.matmul
+// CHECK: [[FUSED:%[^ ]+]] = linalg.generic
+// CHECK-SAME: ins([[MATMUL]],
+// CHECK: [[ADD:%[^ ]+]] = arith.addf
+// CHECK-NOT: linalg.yield
+// CHECK: [[MAX:%[^ ]+]] = arith.maximumf [[ADD]],
+// CHECK-NEXT: linalg.yield [[MAX]]
+// CHECK-NOT: linalg.generic
+// CHECK: return [[FUSED]]

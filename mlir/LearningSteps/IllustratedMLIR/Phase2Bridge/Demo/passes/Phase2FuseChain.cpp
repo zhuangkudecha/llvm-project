@@ -85,7 +85,7 @@ namespace {
 
         if (biasMaps.size() != 3) return false;
         if (!biasMaps[0].isIdentity()) return false;
-        if (!biasMaps[1].getNumResults() != 1) return false;
+        if (biasMaps[1].getNumResults() != 1) return false;
 
         auto biasDim = llvm::dyn_cast<AffineDimExpr>(biasMaps[1].getResult(0));
         if (!biasDim || biasDim.getPosition() != 1) return false;
@@ -160,6 +160,7 @@ namespace {
 
             GreedyRewriteConfig config;
             config.enableFolding(false);
+            config.enableConstantCSE(false);
 
             if(failed(applyPatternsGreedily(getOperation(), std::move(patterns), config))) {
                 signalPassFailure();
