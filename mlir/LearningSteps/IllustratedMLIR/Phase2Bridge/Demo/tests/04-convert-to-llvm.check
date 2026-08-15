@@ -1,0 +1,4 @@
+CHECK-NOT: airth
+CHECK-NOT: func.func
+CHECK-NOT: cf.
+CHECK: llvm.func

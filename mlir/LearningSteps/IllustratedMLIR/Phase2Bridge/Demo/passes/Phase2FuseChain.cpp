@@ -19,18 +19,29 @@ using namespace mlir;
 
 namespace {
 
-//       bias generic
-//      ^bb0(%value: f32, %biasValue: f32, %out: f32):
-//          %sum = arith.addf %value, %biasValue : f32
-//          linalg.yield %sum : f32
+        // %biased = linalg.generic {
+        //     indexing_maps = [
+        //         affine_map<(d0, d1) -> (d0, d1)>,
+        //         affine_map<(d0, d1) -> (d1)>,
+        //         affine_map<(d0, d1) -> (d0, d1)>
+        //     ], 
+        //     iterator_types = ["parallel", "parallel"]
+        // }
+        // ins(%matmul, %bias : tensor<4x16xf32>, tensor<16xf32>)
+        // outs(%biasInit : tensor<4x16xf32>) {
+        //     ^bb0(%value: f32, %biasValue: f32, %out: f32): 
+        //     %sum = arith.addf %value, %biasValue : f32
+        //     linalg.yield %sum : f32
+        // } -> tensor<4x16xf32>
+
     static bool hasExpectedBiasBody(linalg::GenericOp op) {
         Block &body = op->getRegion(0).front();
 
-        if (body.getNumArguments() != 3) {
+        if (body.getNumArguments() != 3) {//%value %biasValue %out
             return false;
         }
 
-        if (body.getOperations().size() != 2) {
+        if (body.getOperations().size() != 2) { // arith.addf linalg.yield
             return false;
         }
 
@@ -50,12 +61,23 @@ namespace {
         return yield->getOperand(0) == addOp->getResult(0);
     }
 
-
-    //
+    // %relu = linalg.generic {
+    //         indexing_maps = [
+    //             affine_map<(d0, d1) -> (d0, d1)>,
+    //             affine_map<(d0, d1) -> (d0, d1)>
+    //         ],
+    //         iterator_types = ["parallel", "parallel"]
+    //     }
+    //     ins(%biased: tensor<4x16xf32>)
+    //     outs(%reluInit: tensor<4x16xf32>) {
+    //         ^bb0(%value: f32, %out: f32):
+    //         %zero = arith.constant 0.0 : f32
+    //         %result = arith.maximumf %value, %zero : f32
+    //         linalg.yield %result : f32
+    //     } -> tensor<4x16xf32>
     static bool hasExpectedReluBody(linalg::GenericOp op) {
         Block &block = op->getRegion(0).front();
-        // 1 input 1 output 
-        if (block.getNumArguments() != 2) return false;
+        if (block.getNumArguments() != 2) return false; //%value %out
 
         // cosntant + maxmumf + yield
         if (block.getOperations().size() != 3) return false;
@@ -101,9 +123,9 @@ namespace {
     struct FuseChainPattern : mlir::OpRewritePattern<linalg::GenericOp> {
         using OpRewritePattern::OpRewritePattern;
 
-        //relu = linalg.matmul
-        //          -> linalg.generic broadcast bias add
-        //          -> linalg.generic maximumf(x, 0)
+        // matRes = linalg.matmul(a, b);
+        // bias = linalg.generic(matRes);
+        // relu = linalg.generic(bias);
         LogicalResult matchAndRewrite(
             linalg::GenericOp relu,
             PatternRewriter &rewriter ) const override {

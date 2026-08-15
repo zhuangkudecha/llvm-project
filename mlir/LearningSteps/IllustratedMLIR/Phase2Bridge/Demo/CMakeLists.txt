@@ -20,6 +20,7 @@ add_library(Phase2Passes MODULE
     passes/Phase2AddZero.cpp
     passes/Phase2FuseChain.cpp
     passes/PluginEntry.cpp
+    passes/Phase2ConvertToLLVM.cpp
 )
 
 target_include_directories(Phase2Passes PRIVATE

@@ -25,6 +25,7 @@ mlirGetPassPluginInfo() {
             registerPhase2InspectionPass();
             registerPhase2AddZeroPass();
             registerFuseChainPass();
+            registerPhase2ConvertToLLVMPass();
         },
     };
 }
