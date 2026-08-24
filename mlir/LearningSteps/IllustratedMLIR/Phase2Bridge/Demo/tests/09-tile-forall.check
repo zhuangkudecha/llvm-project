@@ -1,0 +1,6 @@
+CHECK: scf.forall
+CHECK: tensor.extract_slice
+CHECK: linalg.matmul
+CHECK: scf.forall.in_parallel
+CHECK: tensor.parallel_insert_slice
+CHECK-NOT: scf.for

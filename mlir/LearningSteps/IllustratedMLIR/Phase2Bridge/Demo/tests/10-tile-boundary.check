@@ -1,0 +1,6 @@
+CHECK: affine.min
+CHECK-SAME: -d0 + 127, 64
+CHECK: affine.min
+CHECK-SAME: -d0 + 251, 64
+CHECK: affine.min
+CHECK-SAME: -d0 + 509, 32

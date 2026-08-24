@@ -56,7 +56,7 @@ mlir-opt ... --pass-pipeline='builtin.module(phase2-convert-to-llvm)' \
 提示：operation-specific action > dialect action > unknown-op callback > partial/full 兜底。用 `tensor.empty` 说明 unknown。
 
 - 我的理解：
-legal = illegal > unknown ; operation 先于 dialect
+target 设置的op 的legal/illegal 会覆盖 dialect 的legal/illegal，对于没有显式设置legal 和illegal 的op统一为unknown op。
 
 - 【Review 补充】
 优先级**不是**「legal 与 illegal 谁高」，而是「配置的具体程度」：
@@ -124,7 +124,7 @@ legal 和 illegal 是同一层、只是方向不同；op-specific 的 illegal �
 提示：为什么不能用显式 illegal op 演示？你的 `04-convert-partial-full.mlir` 为什么 func.func 签名必须可转换？
 
 - 我的理解：
-full 中没有unknown op, partial 对于没有声明为legal的op，也没有声明为illegal 的op会使用unknown op替代，pass的锚点为module.op 因此func.func也必须可转换。
+full 中如果转换最后还有unknown op会报转换失败，partial可能会保留。
 
 - 【Review 补充】（重点纠正两处误区）
 1. **「full 中没有 unknown op」不准确**。full 也有 unknown op，区别在**处置**：partial 允许 pre-existing unknown op 原样残留；full 要求包括 unknown 在内的所有 op 最终都 legal，否则失败。

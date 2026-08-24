@@ -1,0 +1,6 @@
+CHECK: scf.for {{.*}} to {{.*}} step {{.*}}
+CHECK: scf.for {{.*}} to {{.*}} step {{.*}}
+CHECK: scf.for {{.*}} to {{.*}} step {{.*}}
+CHECK: tensor.extract_slice
+CHECK: linalg.matmul
+CHECK: tensor.insert_slice
