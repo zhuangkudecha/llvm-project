@@ -22,5 +22,6 @@ void registerPhase2InspectionPass();
 void registerPhase2AddZeroPass();
 void registerFuseChainPass();
 void registerPhase2ConvertToLLVMPass();
+void registerPhase2MatmulTilingPass();
 #endif // PHASE2_BRIDGE_PASSES_H
 
