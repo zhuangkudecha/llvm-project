@@ -1,0 +1,12 @@
+CHECK-LABEL: func.func @matmul
+CHECK: scf.for {{.*}} to {{.*}} step {{.*}}
+CHECK: scf.for {{.*}} to {{.*}} step {{.*}}
+CHECK: scf.for {{.*}} to {{.*}} step {{.*}}
+CHECK: tensor.extract_slice %arg{{.*}}[{{.*}}, {{.*}}] [64, 32] [1, 1]
+CHECK-SAME: to tensor<64x32xf32>
+CHECK: tensor.extract_slice {{.*}} [32, 64] [1, 1]
+CHECK-SAME: to tensor<32x64xf32>
+CHECK: tensor.extract_slice {{.*}} [64, 64] [1, 1]
+CHECK-SAME: to tensor<64x64xf32>
+CHECK: linalg.matmul ins({{.*}} : tensor<64x32xf32>, tensor<32x64xf32>)
+CHECK-NEXT: tensor.insert_slice

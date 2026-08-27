@@ -1,9 +1,0 @@
-// 整除路径：3 层 scf.for + 静态 tile 类型（无 affine.min）
-CHECK: scf.for
-CHECK: scf.for
-CHECK: scf.for
-CHECK: tensor.extract_slice {{.*}} to tensor<64x32xf32>
-CHECK: tensor.extract_slice {{.*}} to tensor<32x64xf32>
-CHECK: tensor.extract_slice {{.*}} to tensor<64x64xf32>
-CHECK: linalg.matmul
-CHECK: tensor.insert_slice
