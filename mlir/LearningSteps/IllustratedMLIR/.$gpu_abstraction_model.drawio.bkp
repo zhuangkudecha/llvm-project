@@ -1,0 +1,1024 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.5 Chrome/126.0.6478.183 Electron/31.3.0 Safari/537.36" version="24.7.5" pages="8">
+  <diagram id="gpu-e2e" name="GPU抽象模型：算子到机器码执行">
+    <mxGraphModel dx="1600" dy="1120" grid="1" gridSize="10" guides="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1120" shadow="0" background="#F8FAFC">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- connectors first; section fills are translucent; captions are opaque vertices -->
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="op" target="opt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="opt" target="mapping">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="mapping" target="ir">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#EA580C;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="ir" target="ptx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="ptx" target="sass">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#9333EA;strokeWidth=2;dashed=1;endArrow=block;" edge="1" parent="1" source="op" target="library">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="145" y="410" />
+              <mxPoint x="485" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#9333EA;strokeWidth=2;dashed=1;endArrow=block;" edge="1" parent="1" source="library" target="sass">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="410" />
+              <mxPoint x="1435" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="host" target="driver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="driver" target="stream">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="stream" target="launch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="sass" target="driver">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1435" y="470" />
+              <mxPoint x="610" y="470" />
+              <mxPoint x="610" y="535" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="launch" target="block">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1440" y="700" />
+              <mxPoint x="205" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="block" target="sm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#475569;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="sm" target="warp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#475569;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="warp" target="units">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="units" target="memory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0EA5E9;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="s1" target="s2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0EA5E9;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="s2" target="s3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0EA5E9;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="s3" target="s4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="title" value="GPU 抽象模型：CUDA 算子与 AI 编译器生成的机器码怎样运行" style="text;html=1;fontFamily=JetBrains Mono;fontSize=24;fontStyle=1;fontColor=#0F172A;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="一张图串起编译期、Host/Driver 运行期与 GPU 设备执行期；以 fused matmul + bias + ReLU 为例" style="text;html=1;fontFamily=JetBrains Mono;fontSize=12;fontColor=#475569;align=left;" vertex="1" parent="1">
+          <mxGeometry x="42" y="62" width="1200" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="bg1" value="" style="rounded=1;html=1;fillColor=#F5F3FF;fillOpacity=18;strokeColor=#7C3AED;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="30" y="110" width="1540" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="bg2" value="" style="rounded=1;html=1;fillColor=#ECFDF5;fillOpacity=18;strokeColor=#059669;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="30" y="500" width="1540" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="bg3" value="" style="rounded=1;html=1;fillColor=#F1F5F9;fillOpacity=18;strokeColor=#475569;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="30" y="720" width="1540" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="bg4" value="" style="rounded=1;html=1;fillColor=#EFF6FF;fillOpacity=18;strokeColor=#0EA5E9;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="30" y="955" width="1540" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="h1" value="① 编译期：高层语义 → 并行 kernel → 目标机器码" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#5B21B6;align=left;" vertex="1" parent="1">
+          <mxGeometry x="50" y="123" width="600" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="h2" value="② 运行期（CPU / CUDA Driver）：装载代码、准备参数、异步提交" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#047857;align=left;" vertex="1" parent="1">
+          <mxGeometry x="50" y="513" width="720" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="h3" value="③ GPU 执行期：以 block 调度、以 warp 发射 SASS 指令" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" vertex="1" parent="1">
+          <mxGeometry x="50" y="733" width="650" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="h4" value="④ tiled matmul 中一个 C tile 的概念循环" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#075985;align=left;" vertex="1" parent="1">
+          <mxGeometry x="50" y="968" width="520" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="op" value="AI / 框架算子&#xa;Y = ReLU(A×B + bias)&#xa;&#xa;算子 ≠ 一条 GPU 指令" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="180" width="190" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="opt" value="图 / 张量优化&#xa;shape · 常量折叠&#xa;算子融合 · 内存规划" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="275" y="185" width="180" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="mapping" value="并行映射 / 调度&#xa;tile · layout · vectorize&#xa;grid / block / thread&#xa;register / shared-memory 规划" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="175" width="210" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="ir" value="GPU 低层 IR&#xa;MLIR GPU / NVGPU&#xa;LLVM IR + NVVM intrinsics&#xa;仍是编译器 IR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="735" y="180" width="205" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="ptx" value="PTX：虚拟 GPU ISA&#xa;可读汇编 / 可携带进制&#xa;不是 SM 最终机器码" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#EA580C;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9A3412;" vertex="1" parent="1">
+          <mxGeometry x="975" y="185" width="205" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="sass" value="cubin / fatbin 中的 SASS&#xa;目标 GPU 架构机器码&#xa;load · mma · add · branch ..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="180" width="300" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="library" value="常见旁路：调用 cuBLAS / cuDNN&#xa;库内部选择预编译或 JIT kernel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#9333EA;strokeWidth=1.5;dashed=1;fontFamily=JetBrains Mono;fontSize=11;fontColor=#581C87;" vertex="1" parent="1">
+          <mxGeometry x="480" y="380" width="330" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="host" value="Host / 框架 Runtime&#xa;显存分配 · 数据搬运&#xa;准备参数与 launch config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="75" y="555" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="driver" value="CUDA Runtime / Driver&#xa;装载 module · 选择 cubin&#xa;或把 PTX JIT 为当前 GPU 的 SASS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="465" y="545" width="290" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="stream" value="CUDA Stream 命令队列&#xa;H2D → kernel → D2H&#xa;同一 stream 内有序；host 通常异步返回" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="870" y="545" width="300" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="launch" value="Launch 实例&#xa;kernel + 参数&#xa;gridDim × blockDim" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1325" y="555" width="205" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="block" value="Grid → Thread Blocks&#xa;block 动态分派给有资源的 SM&#xa;一个 SM 可同时驻留多个 block" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="50" y="785" width="260" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="sm" value="SM Residency&#xa;受 registers / shared memory / warp slots 限制&#xa;block threads → 32-thread warps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="345" y="780" width="270" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="warp" value="Warp Scheduler&#xa;选择 ready warp；等待数据的 warp 暂停&#xa;发射下一条 SASS 指令" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="780" width="270" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="units" value="执行流水线&#xa;FP / INT · Tensor Cores&#xa;LD-ST · SFU · Branch&#xa;active lanes SIMT 执行" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="955" y="780" width="270" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="memory" value="存储层级&#xa;Register（每线程）&#xa;Shared Memory / L1（SM / block）&#xa;L2（全 GPU）→ HBM / DRAM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="780" width="270" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" value="① Global → Shared&#xa;协作搬 A / B tile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#075985;" vertex="1" parent="1">
+          <mxGeometry x="55" y="1005" width="250" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" value="② barrier&#xa;等 tile 完整可见" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#075985;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1005" width="240" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="③ MMA / FMA 累加&#xa;accumulator 留在 registers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#075985;" vertex="1" parent="1">
+          <mxGeometry x="735" y="1005" width="280" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" value="④ 沿 K 循环后写回 C&#xa;完成后 stream 执行下一命令" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#075985;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="1005" width="370" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" value="lowering" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="707" y="230" width="25" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" value="NVPTX" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDBA74;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="944" y="230" width="26" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" value="ptxas / Driver JIT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FDA4AF;spacing=3;fontFamily=JetBrains Mono;fontSize=9;fontColor=#BE123C;" vertex="1" parent="1">
+          <mxGeometry x="1184" y="218" width="30" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" value="module 装载 / JIT 产物" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDA4AF;spacing=3;fontFamily=JetBrains Mono;fontSize=9;fontColor=#BE123C;" vertex="1" parent="1">
+          <mxGeometry x="780" y="458" width="145" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="l5" value="API" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#A7F3D0;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="370" y="585" width="42" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="l6" value="enqueue" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#A7F3D0;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="795" y="585" width="56" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="l7" value="动态分派 blocks" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#A7F3D0;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="705" y="688" width="105" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="l8" value="形成 warps" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="618" y="825" width="29" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l9" value="issue SASS" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="923" y="825" width="29" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="关键结论：AI 编译器不会把 MatMul 变成“一条指令”。它先做融合、分块和线程映射，再生成许多目标指令；GPU 以 block 为调度单位、以 warp 为指令发射单位执行 SASS。具体 SM 单元数量随架构变化，CUDA thread 也不会长期绑定某个 CUDA core。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;fontColor=#78350F;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="55" y="910" width="1150" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="gpu-physical" name="GPU物理执行模型与并行加速">
+    <mxGraphModel dx="1600" dy="1120" grid="1" gridSize="10" guides="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1120" shadow="0" background="#F8FAFC">
+      <root>
+        <mxCell id="p2-0" />
+        <mxCell id="p2-1" parent="p2-0" />
+        <!-- edges first; every caption is a separate opaque vertex -->
+        <mxCell id="p2-e01" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-cmd" target="p2-front">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e02" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-front" target="p2-smarray">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e03" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#475569;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-smarray" target="p2-smzoom">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e04" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-hbm" target="p2-l2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e05" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-l2" target="p2-smarray">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e06" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-reg" target="p2-exec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e07" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-smem" target="p2-exec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e08" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#475569;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-warps" target="p2-sched">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e09" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-sched" target="p2-exec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0EA5E9;strokeWidth=2;endArrow=block;" edge="1" parent="p2-1" source="p2-exec" target="p2-result">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0EA5E9;strokeWidth=2;dashed=1;endArrow=block;" edge="1" parent="p2-1" source="p2-fast1" target="p2-fast2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0EA5E9;strokeWidth=2;dashed=1;endArrow=block;" edge="1" parent="p2-1" source="p2-fast2" target="p2-fast3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0EA5E9;strokeWidth=2;dashed=1;endArrow=block;" edge="1" parent="p2-1" source="p2-fast3" target="p2-fast4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-e14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=1.5;dashed=1;endArrow=block;" edge="1" parent="p2-1" source="p2-control" target="p2-sched">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-title" value="GPU 物理执行模型：有哪些资源，为什么并行计算快" style="text;html=1;fontFamily=JetBrains Mono;fontSize=24;fontStyle=1;fontColor=#0F172A;align=left;" vertex="1" parent="p2-1">
+          <mxGeometry x="40" y="20" width="1250" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-subtitle" value="GPU 是吞吐量处理器：复制大量执行资源，用成百上千个 resident warps 覆盖访存和流水线延迟" style="text;html=1;fontFamily=JetBrains Mono;fontSize=12;fontColor=#475569;align=left;" vertex="1" parent="p2-1">
+          <mxGeometry x="42" y="62" width="1250" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-bgchip" value="" style="rounded=1;html=1;fillColor=#ECFDF5;fillOpacity=18;strokeColor=#059669;strokeWidth=1.5;" vertex="1" parent="p2-1">
+          <mxGeometry x="30" y="110" width="730" height="570" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-bgsm" value="" style="rounded=1;html=1;fillColor=#F1F5F9;fillOpacity=18;strokeColor=#475569;strokeWidth=1.5;" vertex="1" parent="p2-1">
+          <mxGeometry x="790" y="110" width="780" height="570" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-bgfast" value="" style="rounded=1;html=1;fillColor=#EFF6FF;fillOpacity=18;strokeColor=#0EA5E9;strokeWidth=1.5;" vertex="1" parent="p2-1">
+          <mxGeometry x="30" y="720" width="1540" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-chiphead" value="① GPU 芯片全景：大量 SM + 共享缓存/显存系统" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#047857;align=left;" vertex="1" parent="p2-1">
+          <mxGeometry x="50" y="125" width="600" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-smhead" value="② 单个 SM 放大：调度、片上存储与多类执行流水线" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" vertex="1" parent="p2-1">
+          <mxGeometry x="810" y="125" width="650" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-fasthead" value="③ 为什么快：不是单个 thread 更快，而是单位时间完成更多工作" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#075985;align=left;" vertex="1" parent="p2-1">
+          <mxGeometry x="50" y="735" width="760" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-cmd" value="Host / CUDA Stream&#xa;kernel + 参数 + grid/block&#xa;命令通过 PCIe / NVLink 提交" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="p2-1">
+          <mxGeometry x="55" y="180" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-front" value="GPU Front End&#xa;Command Processor&#xa;Work Distributor&#xa;把可运行 blocks 分派到 SM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="p2-1">
+          <mxGeometry x="300" y="175" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-smarray" value="SM Array（很多个）&#xa;&#xa;SM 0　SM 1　SM 2　…　SM N-1&#xa;&#xa;每个 SM 独立驻留并执行多个 blocks / warps&#xa;同一 kernel 的大量 block 横向铺开" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="p2-1">
+          <mxGeometry x="545" y="165" width="190" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-hbm" value="HBM / GDDR&#xa;Global Memory&#xa;容量大 · 延迟高&#xa;高总带宽" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#78350F;" vertex="1" parent="p2-1">
+          <mxGeometry x="60" y="495" width="190" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-l2" value="Memory Controllers + L2 Cache&#xa;所有 SM 共享&#xa;合并/coalesced 请求形成宽内存事务&#xa;原子操作与跨 SM 数据交换" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#78350F;" vertex="1" parent="p2-1">
+          <mxGeometry x="305" y="480" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-copy" value="Copy Engines / DMA&#xa;计算与 H2D / D2H 搬运可在条件满足时重叠" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="p2-1">
+          <mxGeometry x="620" y="500" width="115" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-smzoom" value="Block Residency / 资源分配&#xa;registers + shared memory + warp slots + block slots&#xa;资源用量决定一个 SM 能同时容纳多少 blocks / warps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="p2-1">
+          <mxGeometry x="820" y="170" width="320" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-control" value="取指与控制资源&#xa;Instruction Cache / Fetch&#xa;Constant Cache · Special Registers&#xa;Barrier / Synchronization Units" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#581C87;" vertex="1" parent="p2-1">
+          <mxGeometry x="1190" y="170" width="340" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-warps" value="Resident Warp Pool&#xa;多个 block 的大量 warps&#xa;warp = 32 threads / lanes&#xa;保存 PC、active mask 与执行状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="p2-1">
+          <mxGeometry x="820" y="330" width="230" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-sched" value="Warp Schedulers + Dispatch&#xa;每周期从 ready warps 中选取&#xa;遇到内存/依赖等待就发射别的 warp&#xa;切换无需保存完整 OS 线程上下文" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="p2-1">
+          <mxGeometry x="1100" y="325" width="250" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-reg" value="Register File&#xa;片上、容量大、按 thread 分配&#xa;保存 operands / accumulator&#xa;使用过多会降低 occupancy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#78350F;" vertex="1" parent="p2-1">
+          <mxGeometry x="820" y="505" width="210" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-smem" value="Shared Memory / L1&#xa;SM 片上；block 内共享&#xa;缓存重复使用的 tile&#xa;低延迟但容量有限" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#78350F;" vertex="1" parent="p2-1">
+          <mxGeometry x="1060" y="505" width="210" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-exec" value="执行流水线&#xa;FP32 / FP64 / INT ALU&#xa;Tensor Cores（矩阵 MMA）&#xa;Load/Store · SFU · Branch&#xa;&#xa;不同指令可进入不同流水线" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="p2-1">
+          <mxGeometry x="1310" y="485" width="225" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-result" value="结果&#xa;写回 registers&#xa;或经 L1/L2 写入显存" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;" vertex="1" parent="p2-1">
+          <mxGeometry x="1390" y="335" width="145" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-fast1" value="1. 大量并行宽度&#xa;许多 SM × 每 SM 多个 resident warps&#xa;同一数据并行 kernel 同时处理大量元素" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="p2-1">
+          <mxGeometry x="55" y="790" width="320" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-fast2" value="2. 用并发隐藏延迟&#xa;Warp A 等显存时发射 Warp B/C&#xa;不是让一次 DRAM 访问变快，而是不让流水线闲着" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="p2-1">
+          <mxGeometry x="430" y="790" width="330" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-fast3" value="3. 高带宽 + 数据复用&#xa;合并访存充分利用宽内存接口&#xa;tile 放入 shared memory / registers 后反复计算" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="p2-1">
+          <mxGeometry x="815" y="790" width="330" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-fast4" value="4. 专用且流水化的吞吐资源&#xa;SIMT 一条指令驱动多个 lanes&#xa;Tensor Core 用 MMA 指令完成矩阵块计算" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="p2-1">
+          <mxGeometry x="1200" y="790" width="320" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-l01" value="提交命令" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="p2-1">
+          <mxGeometry x="262" y="217" width="32" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-l02" value="分派 blocks" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#A7F3D0;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="p2-1">
+          <mxGeometry x="507" y="217" width="31" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-l03" value="放大一个 SM" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="p2-1">
+          <mxGeometry x="752" y="215" width="55" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-l04" value="宽内存事务" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDE68A;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="p2-1">
+          <mxGeometry x="257" y="540" width="42" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-l08" value="选择 ready warp" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="p2-1">
+          <mxGeometry x="1056" y="378" width="39" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-l09" value="issue SASS" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDA4AF;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="p2-1">
+          <mxGeometry x="1358" y="452" width="54" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-compare" value="CPU vs GPU：CPU 用少量复杂核心、大缓存、乱序/预测追求单线程低延迟；GPU 把更多晶体管用于大量执行流水线和高带宽供数，追求可并行任务的总体吞吐。适合规则、数据并行、算术强度高的工作；串行依赖、强分支发散、小任务或频繁搬运未必更快。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#78350F;align=left;spacingLeft=12;spacingRight=12;" vertex="1" parent="p2-1">
+          <mxGeometry x="55" y="1010" width="1000" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-caution" value="性能门槛&#xa;• blocks 足够多，能铺满 SM&#xa;• register / shared-memory 用量不过量&#xa;• 访存合并且有复用&#xa;• 少分支发散、少同步&#xa;• 计算量足以摊薄 launch / 传输成本" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#9F1239;align=left;spacingLeft=10;" vertex="1" parent="p2-1">
+          <mxGeometry x="1100" y="995" width="420" height="100" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="gpu-memory" name="GPU存储层级与数据访问">
+    <mxGraphModel dx="1600" dy="1120" grid="1" gridSize="10" guides="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1120" shadow="0" background="#F8FAFC">
+      <root>
+        <mxCell id="m0" />
+        <mxCell id="m1" parent="m0" />
+        <!-- edges first; captions use opaque standalone vertices -->
+        <mxCell id="me01" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;startArrow=block;" edge="1" parent="m1" source="m-exec" target="m-reg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="me02" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;startArrow=block;" edge="1" parent="m1" source="m-reg" target="m-smem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="me03" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;startArrow=block;" edge="1" parent="m1" source="m-smem" target="m-l2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="me04" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;startArrow=block;" edge="1" parent="m1" source="m-l2" target="m-dram">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="me05" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;startArrow=block;" edge="1" parent="m1" source="m-dram" target="m-host">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="me06" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;dashed=1;endArrow=block;" edge="1" parent="m1" source="m-reg" target="m-local">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="475" />
+              <mxPoint x="470" y="575" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="me07" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;dashed=1;endArrow=block;" edge="1" parent="m1" source="m-local" target="m-l2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="840" y="625" />
+              <mxPoint x="840" y="475" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="me08" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0891B2;strokeWidth=1.5;dashed=1;endArrow=block;" edge="1" parent="m1" source="m-const" target="m-exec">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="370" />
+              <mxPoint x="170" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="me09" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0891B2;strokeWidth=1.5;dashed=1;endArrow=block;" edge="1" parent="m1" source="m-texture" target="m-exec">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="535" />
+              <mxPoint x="120" y="535" />
+              <mxPoint x="120" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mtitle" value="GPU 存储层级：作用域、物理路径与优化方法" style="text;html=1;fontFamily=JetBrains Mono;fontSize=24;fontStyle=1;fontColor=#0F172A;align=left;" vertex="1" parent="m1">
+          <mxGeometry x="40" y="20" width="1200" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="msub" value="越靠近执行单元：容量越小、延迟越低、带宽越高；越远：容量越大，但必须用并发与数据复用摊薄访问成本" style="text;html=1;fontFamily=JetBrains Mono;fontSize=12;fontColor=#475569;align=left;" vertex="1" parent="m1">
+          <mxGeometry x="42" y="62" width="1350" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="mbg1" value="" style="rounded=1;html=1;fillColor=#ECFDF5;fillOpacity=18;strokeColor=#059669;strokeWidth=1.5;" vertex="1" parent="m1">
+          <mxGeometry x="30" y="110" width="1540" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="mbg2" value="" style="rounded=1;html=1;fillColor=#EFF6FF;fillOpacity=18;strokeColor=#0EA5E9;strokeWidth=1.5;" vertex="1" parent="m1">
+          <mxGeometry x="30" y="750" width="1540" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="mh1" value="① 真实物理访问主路径" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#047857;align=left;" vertex="1" parent="m1">
+          <mxGeometry x="50" y="125" width="360" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="mh2" value="② CUDA 地址空间：名称描述可见范围，不一定代表物理位置" style="text;html=1;fontFamily=JetBrains Mono;fontSize=13;fontStyle=1;fontColor=#9F1239;align=left;" vertex="1" parent="m1">
+          <mxGeometry x="50" y="330" width="700" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="mh3" value="③ 优化顺序：先减少远端流量，再提高并发" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#075985;align=left;" vertex="1" parent="m1">
+          <mxGeometry x="50" y="765" width="600" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="m-exec" value="SM 执行流水线&#xa;ALU / Tensor Core / LD-ST&#xa;warp 指令在 active lanes 上执行" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="m1">
+          <mxGeometry x="55" y="180" width="225" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="m-reg" value="Register File&#xa;作用域：每 thread 私有&#xa;物理：SM 片上&#xa;最快、带宽最高；容量最小&#xa;保存 operands / accumulator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="m1">
+          <mxGeometry x="335" y="165" width="230" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="m-smem" value="Shared Memory + L1&#xa;Shared：每 block 可见&#xa;L1：每 SM 的硬件缓存&#xa;物理：SM 片上、低延迟&#xa;tile 复用；注意 bank conflicts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#78350F;" vertex="1" parent="m1">
+          <mxGeometry x="620" y="165" width="250" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="m-l2" value="L2 Cache&#xa;作用域：整个 GPU 共享&#xa;连接所有 SM 与 Memory Controllers&#xa;缓存 Global / Local 等流量&#xa;容量/延迟介于片上 SM 与显存之间" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#78350F;" vertex="1" parent="m1">
+          <mxGeometry x="925" y="165" width="250" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="m-dram" value="HBM / GDDR&#xa;CUDA Global Memory 的主要后备存储&#xa;所有 threads / kernels 可访问&#xa;容量最大、原始延迟高&#xa;靠高带宽 + 大量并发维持吞吐" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="m1">
+          <mxGeometry x="1230" y="165" width="280" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="m-host" value="Host Memory&#xa;Pageable / Pinned / Unified Memory 后备页&#xa;经 PCIe / NVLink / CXL 类互连访问或迁移&#xa;通常比设备显存更远；Pinned 利于 DMA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#581C87;" vertex="1" parent="m1">
+          <mxGeometry x="1230" y="535" width="280" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="m-const" value="Constant Memory 地址空间&#xa;设备只读、host 写入&#xa;经 constant cache 服务&#xa;同一 warp 读取同一地址时广播高效&#xa;不同地址会序列化/分多次服务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#164E63;" vertex="1" parent="m1">
+          <mxGeometry x="55" y="370" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="m-texture" value="Texture / Read-only 路径&#xa;只读数据的专用缓存/采样语义&#xa;适合具有空间局部性的读取&#xa;是否使用及具体缓存结构随架构/编译变化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#164E63;" vertex="1" parent="m1">
+          <mxGeometry x="55" y="530" width="220" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="m-local" value="Local Memory 地址空间（重点）&#xa;语义：每 thread 私有&#xa;物理：通常位于设备内存，经 L1/L2 缓存&#xa;来源：register spill、动态索引数组、大对象&#xa;名字叫 local，不代表 SM 片上低延迟" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="m1">
+          <mxGeometry x="335" y="545" width="360" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="m-global" value="Global Memory 地址空间&#xa;所有 threads 可寻址，通常由 cudaMalloc / 框架 allocator 分配&#xa;物理路径：L1（策略相关）→ L2 → HBM/GDDR&#xa;warp 连续地址应合并为尽量少的内存事务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#78350F;" vertex="1" parent="m1">
+          <mxGeometry x="745" y="545" width="390" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="ml01" value="每条指令读写" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#A7F3D0;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="m1">
+          <mxGeometry x="286" y="220" width="43" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ml02" value="显式 tile / cache" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDE68A;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="m1">
+          <mxGeometry x="573" y="220" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ml03" value="cache miss" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDE68A;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="m1">
+          <mxGeometry x="879" y="220" width="38" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ml04" value="Memory Controllers" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDE68A;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="m1">
+          <mxGeometry x="1183" y="215" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ml05" value="PCIe / NVLink" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#DDD6FE;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="m1">
+          <mxGeometry x="1350" y="405" width="70" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ml06" value="register spill" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDA4AF;spacing=3;fontFamily=JetBrains Mono;fontSize=9;fontColor=#BE123C;" vertex="1" parent="m1">
+          <mxGeometry x="430" y="510" width="82" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ml07" value="经 L1 / L2" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDA4AF;spacing=3;fontFamily=JetBrains Mono;fontSize=9;fontColor=#BE123C;" vertex="1" parent="m1">
+          <mxGeometry x="798" y="505" width="82" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="mr1" value="1. Registers 留住热数据&#xa;累加器和短生命周期标量尽量不落地&#xa;但 register 过多会降低 occupancy；spill 更昂贵" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;" vertex="1" parent="m1">
+          <mxGeometry x="55" y="815" width="280" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mr2" value="2. Shared Memory 做 tile 复用&#xa;一次从 Global 搬入，block 内多次使用&#xa;合理 padding / layout 避免 bank conflicts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;" vertex="1" parent="m1">
+          <mxGeometry x="375" y="815" width="285" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mr3" value="3. Global 访问要 coalesced&#xa;一个 warp 的相邻 lanes 访问连续、对齐地址&#xa;减少内存事务数与无效传输字节" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;" vertex="1" parent="m1">
+          <mxGeometry x="700" y="815" width="285" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mr4" value="4. 提高 L2 locality / 减少中间落地&#xa;算子融合、合适的 block 排序与数据布局&#xa;让生产者—消费者少往返 HBM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;" vertex="1" parent="m1">
+          <mxGeometry x="1025" y="815" width="285" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mr5" value="5. 搬运与计算重叠&#xa;异步 copy / pipeline / 多 stages&#xa;前提是依赖、同步和资源占用允许" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;" vertex="1" parent="m1">
+          <mxGeometry x="1350" y="815" width="180" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mlegend" value="定性层级（不是固定周期数）&#xa;延迟：Register &lt; Shared/L1 &lt; L2 &lt; HBM/GDDR &lt; Host&#xa;容量：方向相反&#xa;&#xa;具体容量、缓存合并方式和访问延迟随 GPU 架构、数据类型、命中率及访问模式变化。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#78350F;align=left;spacingLeft=12;" vertex="1" parent="m1">
+          <mxGeometry x="55" y="1010" width="930" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="mwarning" value="三个常见误区&#xa;• Local Memory 不是片上“本地缓存”&#xa;• Shared Memory 与 L1 的具体组织随架构变化&#xa;• Occupancy 高不等于一定快：还要看带宽、延迟、ILP、bank conflict 和分支发散" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#9F1239;align=left;spacingLeft=10;" vertex="1" parent="m1">
+          <mxGeometry x="1030" y="995" width="500" height="100" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="mlir-lowering" name="MLIR GPU Codegen：从 linalg.matmul 到 SASS">
+    <mxGraphModel dx="1600" dy="1120" grid="1" gridSize="10" guides="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1120" shadow="0" background="#F8FAFC">
+      <root>
+        <mxCell id="ml0" />
+        <mxCell id="ml1" parent="ml0" />
+        <mxCell id="ml-e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="ml1" source="ml-s0" target="ml-s1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="ml1" source="ml-s1" target="ml-s2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="ml1" source="ml-s2" target="ml-s3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="ml1" source="ml-s3" target="ml-s4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="ml1" source="ml-s4" target="ml-s5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="ml1" source="ml-s5" target="ml-s6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="ml1" source="ml-s6" target="ml-s7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-title" value="MLIR GPU Codegen：从 linalg.matmul 到 SASS 的具体 lowering 管线" style="text;html=1;fontFamily=JetBrains Mono;fontSize=24;fontStyle=1;fontColor=#0F172A;align=left;" vertex="1" parent="ml1">
+          <mxGeometry x="40" y="20" width="1350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-sub" value="以 fused matmul + bias + ReLU 为例：fusion 发生在 linalg 层；越往下越接近 target，dialect 语义逐步收束为 GPU 指令" style="text;html=1;fontFamily=JetBrains Mono;fontSize=12;fontColor=#475569;align=left;" vertex="1" parent="ml1">
+          <mxGeometry x="42" y="62" width="1350" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-bg" value="" style="rounded=1;html=1;fillColor=#F1F5F9;fillOpacity=18;strokeColor=#475569;strokeWidth=1.5;" vertex="1" parent="ml1">
+          <mxGeometry x="30" y="105" width="1540" height="745" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-h1" value="Lowering 八步走读：左列往下（①→④）→ 横移到右列 → 右列往上（⑤→⑧）" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" vertex="1" parent="ml1">
+          <mxGeometry x="50" y="120" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-s0" value="① tensor / linalg&#xa;linalg.matmul on tensors&#xa;&#xa;纯值语义&#xa;无内存、无线程、无 tile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="ml1">
+          <mxGeometry x="70" y="160" width="620" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-s1" value="② memref 显式内存&#xa;tensor.empty → memref.alloc&#xa;linalg.matmul on memrefs&#xa;&#xa;引入 buffer 生命周期与读写位置" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="ml1">
+          <mxGeometry x="70" y="340" width="620" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-s2" value="③ 并行结构 + tiling&#xa;scf.for · gpu.launch&#xa;gpu.block_id / gpu.thread_id&#xa;&#xa;把 tile 映射到 grid / block / thread" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="ml1">
+          <mxGeometry x="70" y="520" width="620" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-s3" value="④ vector 化&#xa;vector.transfer_read / write&#xa;vector.contract（matmul 核心）&#xa;&#xa;显式向量长度，为 MMA fragment 铺路" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="ml1">
+          <mxGeometry x="70" y="700" width="620" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-s4" value="⑤ GPU / NVGPU&#xa;nvgpu.mma.sync / nvgpu.ldmatrix&#xa;shared → register fragment&#xa;&#xa;真正落到 Tensor Core 指令语义" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="ml1">
+          <mxGeometry x="890" y="700" width="620" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-s5" value="⑥ LLVM + NVVM&#xa;llvm.func · nvvm.mma&#xa;nvvm.read.ptx.sreg&#xa;&#xa;dialect 边界收束到 target intrinsic" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#581C87;" vertex="1" parent="ml1">
+          <mxGeometry x="890" y="520" width="620" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-s6" value="⑦ PTX（虚拟 ISA）&#xa;可读汇编，仍不是 SM 机器码&#xa;由 NVPTX backend 或 Driver JIT 产生" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#EA580C;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9A3412;" vertex="1" parent="ml1">
+          <mxGeometry x="890" y="340" width="620" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-s7" value="⑧ SASS / cubin·fatbin&#xa;目标 GPU 架构机器码&#xa;driver 装载，或被 JIT 到当前 GPU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="ml1">
+          <mxGeometry x="890" y="160" width="620" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-l1" value="One-Shot Bufferize" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="ml1">
+          <mxGeometry x="290" y="298" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-l2" value="Tiling + Map to GPU" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="ml1">
+          <mxGeometry x="290" y="478" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-l3" value="Vectorize" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="ml1">
+          <mxGeometry x="290" y="658" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-l4" value="Convert to NVGPU" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#A7F3D0;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="ml1">
+          <mxGeometry x="700" y="790" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-l5" value="Convert to LLVM / NVVM" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#DDD6FE;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="ml1">
+          <mxGeometry x="1110" y="658" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-l6" value="NVPTX → PTX" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDBA74;spacing=3;fontFamily=JetBrains Mono;fontSize=9;fontColor=#9A3412;" vertex="1" parent="ml1">
+          <mxGeometry x="1110" y="478" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-l7" value="ptxas / JIT → SASS" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDA4AF;spacing=3;fontFamily=JetBrains Mono;fontSize=9;fontColor=#BE123C;" vertex="1" parent="ml1">
+          <mxGeometry x="1110" y="298" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-note" value="每层只回答一个问题：linalg 算什么 · memref 数据放哪 · scf/gpu 谁算哪块 · vector/nvgpu 怎么用硬件算 · llvm/nvvm 有哪些原语 · PTX/SASS 可执行机器码。MLIR 的价值是每层都能单独查看、验证、替换、回退，而不是一次性从高层语义直接跳到机器码。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;fontColor=#78350F;align=left;spacingLeft=10;" vertex="1" parent="ml1">
+          <mxGeometry x="70" y="875" width="1450" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-phase" value="和 Phase2Bridge 的关系：Phase2 的自定义 Pass 正工作在这条链的 tile / vectorize / convert 段，本图用于定位当前 transformation 位于整条 lowering 的哪个位置。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#581C87;align=left;spacingLeft=10;" vertex="1" parent="ml1">
+          <mxGeometry x="70" y="985" width="1450" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="mma" name="Tensor Core MMA：fragment 布局与 K 循环累加">
+    <mxGraphModel dx="1600" dy="1120" grid="1" gridSize="10" guides="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1120" shadow="0" background="#F8FAFC">
+      <root>
+        <mxCell id="tc0" />
+        <mxCell id="tc1" parent="tc0" />
+        <mxCell id="tc-e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;" edge="1" parent="tc1" source="tc-a" target="tc-mma">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;" edge="1" parent="tc1" source="tc-b" target="tc-mma">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;endArrow=block;" edge="1" parent="tc1" source="tc-mma" target="tc-c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="tc1" source="tc-k1" target="tc-k2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="tc1" source="tc-k2" target="tc-k3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="tc1" source="tc-k3" target="tc-k4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-title" value="Tensor Core MMA：fragment 数据布局与 K 循环累加" style="text;html=1;fontFamily=JetBrains Mono;fontSize=24;fontStyle=1;fontColor=#0F172A;align=left;" vertex="1" parent="tc1">
+          <mxGeometry x="40" y="20" width="1350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-sub" value="mma.sync.aligned.m16n8k16（FP16 输入，FP32 累加）：A/B/C 被切成 fragment 分散到 32 个 lanes；accumulator 在整个 K 循环期间停在 register" style="text;html=1;fontFamily=JetBrains Mono;fontSize=12;fontColor=#475569;align=left;" vertex="1" parent="tc1">
+          <mxGeometry x="42" y="62" width="1500" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-bg1" value="" style="rounded=1;html=1;fillColor=#ECFDF5;fillOpacity=18;strokeColor=#059669;strokeWidth=1.5;" vertex="1" parent="tc1">
+          <mxGeometry x="30" y="105" width="1540" height="365" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-bg2" value="" style="rounded=1;html=1;fillColor=#F1F5F9;fillOpacity=18;strokeColor=#475569;strokeWidth=1.5;" vertex="1" parent="tc1">
+          <mxGeometry x="30" y="500" width="1540" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-h1" value="① mma.sync 的 fragment 布局：tile 被切成线程私有片段" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#047857;align=left;" vertex="1" parent="tc1">
+          <mxGeometry x="50" y="120" width="700" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-h2" value="② K 方向循环：ldmatrix → mma.sync → 累加，accumulator 始终停在 register" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" vertex="1" parent="tc1">
+          <mxGeometry x="50" y="515" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-a" value="A tile（M×K = 16×16）&#xa;FP16，行主序&#xa;&#xa;A fragment&#xa;每个 lane 持 8 个 FP16" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="tc1">
+          <mxGeometry x="55" y="160" width="280" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-b" value="B tile（K×N = 16×8）&#xa;FP16，列主序&#xa;&#xa;B fragment&#xa;每个 lane 持 4 个 FP16" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="tc1">
+          <mxGeometry x="55" y="330" width="280" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-mma" value="mma.sync.aligned&#xa;.m16n8k16&#xa;.row.col&#xa;.f32.f16.f16.f32&#xa;&#xa;一条指令完成&#xa;16×8×16 的乘加" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="tc1">
+          <mxGeometry x="420" y="200" width="260" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-c" value="C tile（M×N = 16×8）&#xa;FP32 accumulator&#xa;&#xa;C fragment&#xa;每个 lane 持 4 个 FP32&#xa;整个 K 循环留在 register" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="tc1">
+          <mxGeometry x="750" y="200" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-legend" value="fragment 大小速查（32 lanes）&#xa;&#xa;A fragment：每 lane 8×FP16&#xa;B fragment：每 lane 4×FP16&#xa;C accumulator：每 lane 4×FP32&#xa;&#xa;具体布局由 PTX ISA 固定，&#xa;不是按矩阵自然行/列切分" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#581C87;align=left;spacingLeft=10;" vertex="1" parent="tc1">
+          <mxGeometry x="1080" y="200" width="440" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-l1" value="A fragment" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#DDD6FE;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="tc1">
+          <mxGeometry x="345" y="213" width="70" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-l2" value="B fragment" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#DDD6FE;spacing=3;fontFamily=JetBrains Mono;fontSize=9;" vertex="1" parent="tc1">
+          <mxGeometry x="345" y="388" width="70" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-l3" value="累加" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#FDA4AF;spacing=3;fontFamily=JetBrains Mono;fontSize=9;fontColor=#BE123C;" vertex="1" parent="tc1">
+          <mxGeometry x="690" y="288" width="50" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-k1" value="① 载入当前 K tile&#xa;ldmatrix / ld.shared&#xa;把 A_k、B_k 从 shared&#xa;搬进每个 lane 的 fragment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="tc1">
+          <mxGeometry x="55" y="560" width="320" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-k2" value="② mma.sync 累加&#xa;C_fragment +=&#xa;A_fragment × B_fragment&#xa;硬件完成矩阵块乘加" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="tc1">
+          <mxGeometry x="415" y="560" width="280" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-k3" value="③ k += 16，继续循环&#xa;A/B fragment 被下一 K tile 覆盖&#xa;C accumulator 保持不动" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#78350F;" vertex="1" parent="tc1">
+          <mxGeometry x="735" y="560" width="290" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-k4" value="④ K 结束后融合并写回&#xa;在 register 上做 bias + ReLU&#xa;再把 C_fragment 写回 shared / global" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="tc1">
+          <mxGeometry x="1065" y="560" width="440" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-note" value="关键结论：理解 MMA 的关键不是「一条指令算一个矩阵块」，而是 fragment 布局——A/B/C 如何分散到 32 个 lanes 的寄存器中。它决定 ldmatrix 怎样从 shared 取数、register bank 冲突怎样发生，以及 accumulator 为什么必须跨 K 循环留在寄存器。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;fontColor=#78350F;align=left;spacingLeft=10;" vertex="1" parent="tc1">
+          <mxGeometry x="55" y="830" width="1050" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tc-caution" value="两个常见误区&#xa;• mma.sync 的 fragment 布局由 PTX ISA 固定，不是随意切片&#xa;• wgmma（Hopper 及以后）是 warpgroup 级 MMA：fragment 分布在 128 lanes，register 与同步模型和 mma.sync 不同" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontColor=#9F1239;align=left;spacingLeft=10;" vertex="1" parent="tc1">
+          <mxGeometry x="1130" y="830" width="400" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="sw-pipeline" name="软件流水线：多 stage 重叠访存与计算">
+    <mxGraphModel dx="1728" dy="1219" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1120" background="#F8FAFC" math="0" shadow="0">
+      <root>
+        <mxCell id="sp0" />
+        <mxCell id="sp1" parent="sp0" />
+        <mxCell id="sp-title" value="软件流水线：用多 stage 把访存和 Tensor Core 计算重叠" style="text;html=1;fontFamily=JetBrains Mono;fontSize=24;fontStyle=1;fontColor=#0F172A;align=left;" parent="sp1" vertex="1">
+          <mxGeometry x="40" y="20" width="1350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-sub" value="cp.async / TMA 把下一次 global→shared 提前发出；用多个 stage buffer 轮转，让 mma.sync 不空转" style="text;html=1;fontFamily=JetBrains Mono;fontSize=12;fontColor=#475569;align=left;" parent="sp1" vertex="1">
+          <mxGeometry x="42" y="62" width="1350" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-bg1" value="" style="rounded=1;html=1;fillColor=#F1F5F9;fillOpacity=18;strokeColor=#475569;strokeWidth=1.5;" parent="sp1" vertex="1">
+          <mxGeometry x="30" y="105" width="1540" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-bg2" value="" style="rounded=1;html=1;fillColor=#ECFDF5;fillOpacity=18;strokeColor=#059669;strokeWidth=1.5;" parent="sp1" vertex="1">
+          <mxGeometry x="30" y="470" width="1540" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-h1" value="① 没有流水线：每个 K tile 都是 load → 等待 → MMA 串行" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" parent="sp1" vertex="1">
+          <mxGeometry x="50" y="120" width="700" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-n1" value="Load A_k / B_k&#xa;global → shared" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#78350F;" parent="sp1" vertex="1">
+          <mxGeometry x="70" y="175" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-n2" value="barrier 等待&#xa;计算单元空闲" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#9F1239;" parent="sp1" vertex="1">
+          <mxGeometry x="290" y="175" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-n3" value="MMA_k" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" parent="sp1" vertex="1">
+          <mxGeometry x="510" y="175" width="130" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-n4" value="Load A_{k+1} / B_{k+1}&#xa;global → shared" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#D97706;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#78350F;" parent="sp1" vertex="1">
+          <mxGeometry x="680" y="175" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-n5" value="barrier 等待&#xa;计算单元空闲" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#9F1239;" parent="sp1" vertex="1">
+          <mxGeometry x="900" y="175" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-n6" value="MMA_{k+1}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" parent="sp1" vertex="1">
+          <mxGeometry x="1120" y="175" width="130" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-note1" value="串行执行：每一段 K 都要等 global→shared 完成，Tensor Core 大部分时间在等数据，访存延迟完全暴露。" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" parent="sp1" vertex="1">
+          <mxGeometry x="70" y="310" width="1150" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-n1" target="sp-n2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-n2" target="sp-n3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-n3" target="sp-n4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-n4" target="sp-n5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-n5" target="sp-n6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e13" value="K 迭代：重复同样串行" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;dashed=1;endArrow=block;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="sp1" source="sp-n6" target="sp-n1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1185" y="160" />
+              <mxPoint x="160" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sp-h2" value="② 多 stage 软件流水线：prologue / mainloop / epilogue" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#047857;align=left;" parent="sp1" vertex="1">
+          <mxGeometry x="50" y="485" width="700" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-pro" value="Prologue（填充）&#xa;&#xa;先发出前 num_stages−1 个&#xa;异步 copy，把 pipeline 填满&#xa;&#xa;此时还没有 MMA 可做" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" parent="sp1" vertex="1">
+          <mxGeometry x="70" y="545" width="290" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-main" value="Mainloop（稳态）&#xa;&#xa;每个 K iteration 同时做：&#xa;① 异步 copy 下一个 tile（cp.async / TMA）&#xa;② 对当前 stage 执行 mma.sync&#xa;③ 等待下一 stage 到达（cp.async.wait / mbarrier）&#xa;&#xa;访存延迟被计算覆盖，Tensor Core 不空转" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" parent="sp1" vertex="1">
+          <mxGeometry x="400" y="535" width="650" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-epi" value="Epilogue（排空）&#xa;&#xa;不再发新的 copy&#xa;把剩余 stage 的 MMA 算完&#xa;&#xa;然后写回 C" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" parent="sp1" vertex="1">
+          <mxGeometry x="1090" y="545" width="290" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-pro" target="sp-main" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-main" target="sp-epi" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-sblabel" value="num_stages = 3 → 三份 shared memory buffer 轮转" style="text;html=1;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#334155;align=left;" parent="sp1" vertex="1">
+          <mxGeometry x="1140" y="830" width="520" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-sb0" value="stage 0 buffer" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" parent="sp1" vertex="1">
+          <mxGeometry x="250" y="815" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-sb1" value="stage 1 buffer" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" parent="sp1" vertex="1">
+          <mxGeometry x="640" y="815" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-sb2" value="stage 2 buffer" style="rounded=1;html=1;fillColor=#FFFFFF;strokeColor=#0EA5E9;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" parent="sp1" vertex="1">
+          <mxGeometry x="960" y="815" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e8" value="① cp.async 写下一 stage" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=1;endArrow=block;" parent="sp1" source="sp-main" target="sp-sb0" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="790" />
+              <mxPoint x="340" y="790" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sp-e12" value="② mma 读当前 stage" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-sb1" target="sp-main" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="815" />
+              <mxPoint x="710" y="775" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sp-e9" value="轮转" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-sb0" target="sp-sb1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e10" value="轮转" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;" parent="sp1" source="sp-sb1" target="sp-sb2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sp-e11" value="轮转" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;exitX=0.548;exitY=1.003;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="sp1" source="sp-sb2" target="sp-sb0" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1059" y="890" />
+              <mxPoint x="340" y="890" />
+            </Array>
+            <mxPoint x="1060" y="814.9999999999998" as="sourcePoint" />
+            <mxPoint x="440" y="845.0000000000005" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sp-note2" value="关键结论：软件流水线不是把一次访存变快，而是用多个 stage buffer 把下一次访存提前发出，让它和当前 MMA 重叠；代价是占用更多 shared memory，并引入更细粒度同步（cp.async.wait / mbarrier）。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;fontColor=#78350F;align=left;spacingLeft=10;" parent="sp1" vertex="1">
+          <mxGeometry x="70" y="920" width="1450" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="bank-coalesce" name="Bank conflict 与 Global 合并访存">
+    <mxGraphModel dx="1600" dy="1120" grid="1" gridSize="10" guides="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1120" shadow="0" background="#F8FAFC">
+      <root>
+        <mxCell id="bm0" />
+        <mxCell id="bm1" parent="bm0" />
+        <mxCell id="bm-title" value="Shared Memory bank conflict 与 Global 合并访存" style="text;html=1;fontFamily=JetBrains Mono;fontSize=24;fontStyle=1;fontColor=#0F172A;align=left;" vertex="1" parent="bm1">
+          <mxGeometry x="40" y="20" width="1350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-sub" value="本质都是：32 个 lane 的一次访问，到底被硬件服务成 1 次还是多次" style="text;html=1;fontFamily=JetBrains Mono;fontSize=12;fontColor=#475569;align=left;" vertex="1" parent="bm1">
+          <mxGeometry x="42" y="62" width="1350" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-bg1" value="" style="rounded=1;html=1;fillColor=#F1F5F9;fillOpacity=18;strokeColor=#475569;strokeWidth=1.5;" vertex="1" parent="bm1">
+          <mxGeometry x="30" y="105" width="1540" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-bg2" value="" style="rounded=1;html=1;fillColor=#ECFDF5;fillOpacity=18;strokeColor=#059669;strokeWidth=1.5;" vertex="1" parent="bm1">
+          <mxGeometry x="30" y="430" width="1540" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-h1" value="① Global 合并访存：同一个 warp，不同访问模式 → 不同事务数" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" vertex="1" parent="bm1">
+          <mxGeometry x="50" y="115" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-warp" value="一个 warp = 32 lanes&#xa;&#xa;每个 lane 发出一个&#xa;4B 访存请求&#xa;&#xa;（lane 0 .. lane 31）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="bm1">
+          <mxGeometry x="70" y="150" width="260" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-c1" value="连续地址 a[0..31]（对齐）&#xa;32 × 4B = 128B&#xa;→ 合并成 1 个内存事务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="bm1">
+          <mxGeometry x="520" y="145" width="480" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-c2" value="stride=8 地址 a[i*8]&#xa;32 个请求落在多个 32B 段&#xa;→ 拆成多个事务，浪费带宽" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="bm1">
+          <mxGeometry x="520" y="260" width="480" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-cnote" value="关键：同一 warp 内地址连续 + 按 32B/128B 对齐，内存控制器才能把 32 个请求压成尽量少的宽事务。" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" vertex="1" parent="bm1">
+          <mxGeometry x="70" y="370" width="1350" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-e1" value="地址连续" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="bm1" source="bm-warp" target="bm-c1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400" y="175" />
+              <mxPoint x="460" y="175" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bm-e2" value="stride=8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;endArrow=block;" edge="1" parent="bm1" source="bm-warp" target="bm-c2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400" y="315" />
+              <mxPoint x="460" y="315" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bm-h2" value="② Shared Memory bank：lane → bank 的映射决定冲突" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#047857;align=left;" vertex="1" parent="bm1">
+          <mxGeometry x="50" y="440" width="1000" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-lane1" value="无冲突访问&#xa;a[0], a[1], ... a[31]&#xa;&#xa;lane i 命中 bank i&#xa;（地址连续，bank = i）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="bm1">
+          <mxGeometry x="70" y="480" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-bank1" value="bank 0 .. bank 31&#xa;&#xa;每个 bank 只被 1 个 lane 命中&#xa;→ 一次访存完成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="bm1">
+          <mxGeometry x="620" y="480" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-lane2" value="冲突访问&#xa;a[0], a[16], a[32]...&#xa;&#xa;lane 0 与 lane 16&#xa;命中同一个 bank 0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="bm1">
+          <mxGeometry x="70" y="630" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-bank2" value="bank 0 被 2 个 lane 命中&#xa;&#xa;其余 bank 空闲&#xa;→ 访问被串行成 2 次" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="bm1">
+          <mxGeometry x="620" y="630" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-e3" value="lane i → bank i（1:1）" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="bm1" source="bm-lane1" target="bm-bank1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="540" />
+              <mxPoint x="580" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bm-e4" value="2-way conflict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E11D48;strokeWidth=2;endArrow=block;" edge="1" parent="bm1" source="bm-lane2" target="bm-bank2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="690" />
+              <mxPoint x="580" y="690" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bm-pad" value="修复：给 shared 数组加 padding 改变列 stride，避免 2 的幂访问撞到同一 bank。例如 shared[16][16+1] 而不是 shared[16][16]。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=#7C3AED;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontColor=#581C87;align=left;spacingLeft=10;" vertex="1" parent="bm1">
+          <mxGeometry x="70" y="800" width="1450" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="bm-note" value="关键结论：shared 很快，但 bank 冲突会让访问翻倍；global 很慢，但合并访存能把 32 个请求压成 1 个事务。两者共同决定 tiled matmul 的带宽利用率。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;fontColor=#78350F;align=left;spacingLeft=10;" vertex="1" parent="bm1">
+          <mxGeometry x="70" y="910" width="1450" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="occupancy" name="Occupancy：资源占用如何决定 resident warps">
+    <mxGraphModel dx="1600" dy="1120" grid="1" gridSize="10" guides="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1120" shadow="0" background="#F8FAFC">
+      <root>
+        <mxCell id="oc0" />
+        <mxCell id="oc1" parent="oc0" />
+        <mxCell id="oc-title" value="Occupancy：registers / shared / warp slots 怎样共同决定 resident warps" style="text;html=1;fontFamily=JetBrains Mono;fontSize=24;fontStyle=1;fontColor=#0F172A;align=left;" vertex="1" parent="oc1">
+          <mxGeometry x="40" y="20" width="1350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-sub" value="一个 kernel 能在 SM 上驻留多少 warp，取决于四类资源分别能容纳多少，再取最小值" style="text;html=1;fontFamily=JetBrains Mono;fontSize=12;fontColor=#475569;align=left;" vertex="1" parent="oc1">
+          <mxGeometry x="42" y="62" width="1350" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-bg1" value="" style="rounded=1;html=1;fillColor=#F1F5F9;fillOpacity=18;strokeColor=#475569;strokeWidth=1.5;" vertex="1" parent="oc1">
+          <mxGeometry x="30" y="105" width="1540" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-bg2" value="" style="rounded=1;html=1;fillColor=#ECFDF5;fillOpacity=18;strokeColor=#059669;strokeWidth=1.5;" vertex="1" parent="oc1">
+          <mxGeometry x="30" y="375" width="1540" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-h1" value="① SM 资源上限 + 给定 kernel 用量（以 A100 为例，数字为示意）" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#334155;align=left;" vertex="1" parent="oc1">
+          <mxGeometry x="50" y="115" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-ku" value="给定 kernel 用量：registers = 128 / thread · shared = 32 KB / block · 256 threads / block（8 warps）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;" vertex="1" parent="oc1">
+          <mxGeometry x="70" y="142" width="1400" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-r1" value="Registers&#xa;65536 / SM&#xa;按 thread 分配" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="oc1">
+          <mxGeometry x="70" y="205" width="330" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-r2" value="Shared Memory&#xa;164 KB / SM&#xa;按 block 分配" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="oc1">
+          <mxGeometry x="440" y="205" width="330" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-r3" value="Warp Slots&#xa;64 warps / SM&#xa;1 warp = 32 threads" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="oc1">
+          <mxGeometry x="810" y="205" width="330" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-r4" value="Block Slots&#xa;32 blocks / SM&#xa;调度粒度上限" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="oc1">
+          <mxGeometry x="1180" y="205" width="330" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-h2" value="② 各资源分别能容纳多少 warp → 取最小值" style="text;html=1;fontFamily=JetBrains Mono;fontSize=14;fontStyle=1;fontColor=#047857;align=left;" vertex="1" parent="oc1">
+          <mxGeometry x="50" y="385" width="1000" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-c1" value="按 registers&#xa;65536 ÷ (128×256)&#xa;= 2 blocks → 16 warps ← 瓶颈" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E11D48;strokeWidth=2;fontFamily=JetBrains Mono;fontSize=11;fontStyle=1;fontColor=#9F1239;" vertex="1" parent="oc1">
+          <mxGeometry x="70" y="420" width="330" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-c2" value="按 shared memory&#xa;164 KB ÷ 32 KB&#xa;= 5 blocks → 40 warps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="oc1">
+          <mxGeometry x="440" y="420" width="330" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-c3" value="按 warp slots&#xa;64 ÷ 8 = 8 blocks&#xa;→ 64 warps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="oc1">
+          <mxGeometry x="810" y="420" width="330" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-c4" value="按 block slots&#xa;32 blocks → 256 warps&#xa;（受 warp slots 限制）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=11;" vertex="1" parent="oc1">
+          <mxGeometry x="1180" y="420" width="330" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-min" value="min(16, 40, 64, 256) = 16 warps → occupancy = 16 / 64 = 25%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;fontColor=#78350F;align=left;spacingLeft=10;" vertex="1" parent="oc1">
+          <mxGeometry x="430" y="560" width="700" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-note" value="瓶颈是 registers：想提高 occupancy，要么降低每线程 registers（可能引发 spill），要么减小 block 线程数；也可用 __launch_bounds__ 限制 registers 换 occupancy。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=1.5;fontFamily=JetBrains Mono;fontSize=10;fontStyle=1;fontColor=#78350F;align=left;spacingLeft=10;" vertex="1" parent="oc1">
+          <mxGeometry x="70" y="660" width="1450" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-r1" target="oc-c1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-r2" target="oc-c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-r3" target="oc-c3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-r4" target="oc-c4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-c1" target="oc-min">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="235" y="540" />
+              <mxPoint x="480" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oc-e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-c2" target="oc-min">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="605" y="540" />
+              <mxPoint x="680" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oc-e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-c3" target="oc-min">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="975" y="540" />
+              <mxPoint x="880" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oc-e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-c4" target="oc-min">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1345" y="540" />
+              <mxPoint x="1080" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oc-e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#F59E0B;strokeWidth=2;endArrow=block;" edge="1" parent="oc1" source="oc-min" target="oc-note">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oc-e10" value="kernel 用量参与每次除法" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=1;endArrow=block;" edge="1" parent="oc1" source="oc-ku" target="oc-min">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790" y="190" />
+              <mxPoint x="790" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
